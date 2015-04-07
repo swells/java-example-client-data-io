@@ -121,10 +121,10 @@ public class RepoFileInGraphicsPlotOut {
             /*
              * Execute a public analytics Web service as an authenticated
              * user based on a repository-managed R script:
-             * /testuser/example-data-io/hipStar.R
+             * /testuser/example-data-io/dataIO.R
              */
             RProjectExecution exec =
-                    rProject.executeScript("hipStar.R",
+                    rProject.executeScript("dataIO.R",
                             "example-data-io", "testuser", null, options);
 
             log.info("Project script " +

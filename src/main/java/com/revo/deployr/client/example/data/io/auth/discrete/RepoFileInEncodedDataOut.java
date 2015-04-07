@@ -114,10 +114,10 @@ public class RepoFileInEncodedDataOut {
             /*
              * Execute a public analytics Web service as an anonymous
              * user based on a repository-managed R script:
-             * /testuser/example-data-io/hipStar.R
+             * /testuser/example-data-io/dataIO.R
              */
             RScriptExecution exec =
-                    rClient.executeScript("hipStar.R",
+                    rClient.executeScript("dataIO.R",
                             "example-data-io", "testuser", null, options);
 
             log.info("R script execution completed, " +

@@ -32,7 +32,7 @@ Anonymous users can use the full set of data inputs and outputs indicated above 
 ### Anonymous Discrete Execution Data I/O Examples
 
 ```
-Source: src/main/java/com/revo/deployr/client/example/data/io/anon/*.java
+Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/*.java
 ```
 
 These examples demonstrate the anonymous use of stateless projects that support the discrete execution of R scripts.
@@ -121,7 +121,7 @@ All of the examples use a sample R script to handle inputs and generate outputs 
 This R script is found here:
 
 ```
-analytics/hipStar.R
+analytics/dataIO.R
 ```
 
 The R scripts and data files used by these example application are
@@ -141,7 +141,7 @@ purposes you can use the DeployR Repository Manager as follows:
    directory and set the access control to _public_.
 4. Upload analytics/hipStar.rData to the example-data-io directory
    directory and set the access control to _public_.
-5. Upload analytics/hipStar.R to the example-data-io directory
+5. Upload analytics/dataIO.R to the example-data-io directory
    directory and set the access control to _public_.
 
 

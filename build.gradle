@@ -10,14 +10,12 @@ repositories {
 
 applicationDefaultJvmArgs = ["-Dendpoint=http://localhost:7400/deployr",
                              "-Dusername=testuser",
-                             "-Dpassword=changeme",
-                             "-Drepository-dataio-csv=exampleDataIO.csv",
-                             "-Drepository-dataio-model=exampleDataIO.rData",
-                             "-Drepository-dataio-script=exampleDataIO.R",
-                             "-Drepository-dataio-directory=example-data-io"]
+                             "-Dpassword=changeme"]
+                             
 
 dependencies {
     compile "com.revolutionanalytics.deployr:jDeployR:7.4.3"
+    compile "commons-io:commons-io:2.4"
 }
 
 task argsOverride << {

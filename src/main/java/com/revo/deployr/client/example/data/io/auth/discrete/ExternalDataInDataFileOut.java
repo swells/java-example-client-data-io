@@ -1,5 +1,5 @@
 /*
- * ExternalDataFileInput.java
+ * ExternalDataInDataFileOut.java
  *
  * Copyright (C) 2010-2015 by Revolution Analytics Inc.
  *
@@ -10,7 +10,7 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.auth.stateful;
+package com.revo.deployr.client.example.data.io.auth.discrete;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
@@ -19,12 +19,15 @@ import com.revo.deployr.client.params.*;
 import com.revo.deployr.client.auth.RAuthentication;
 import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import java.util.*;
+import java.io.*;
+import java.net.*;
+import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
-public class ExternalDataFileInput {
+public class ExternalDataInDataFileOut {
 
-    private static Logger log = Logger.getLogger(ExternalDataFileInput.class);
+    private static Logger log = Logger.getLogger(ExternalDataInDataFileOut.class);
     /*
      * Hipparcos star dataset URL endpoint.
      */
@@ -34,7 +37,6 @@ public class ExternalDataFileInput {
     public static void main(String args[]) throws Exception {
 
         RClient rClient = null;
-        RProject rProject = null;
 
         try {
 
@@ -55,6 +57,7 @@ public class ExternalDataFileInput {
             log.info("Established anonymous " +
                     "connection, rClient=" + rClient);
 
+
             /*
              * Build a basic authentication token.
              */
@@ -71,28 +74,11 @@ public class ExternalDataFileInput {
              */
             RUser rUser = rClient.login(rAuth);
             log.info("Upgraded to authenticated " +
-                    "connection for rUser=" + rUser);
-
+                    "connection, rUser=" + rUser);
+            
             /*
-             * Create a temporary project (R session).
-             *
-             * Optionally:
-             * ProjectCreationOptions options =
-             * new ProjectCreationOptions();
-             *
-             * Populate options as needed, then:
-             *
-             * rProject = rUser.createProject(options);
-             */
-            rProject = rUser.createProject();
-
-            log.info("Created stateful temporary " +
-                    "R session, rProject=" + rProject);
-
-            /*
-             * Create a ProjectExecutionOptions instance
-             * to specify data inputs and output to the
-             * execution of the repository-managed R script.
+             * Create the AnonymousProjectExecutionOptions object·
+             * to specify data inputs and output to the script.
              *
              * This options object can be used to pass standard
              * execution model parameters on execution calls. All
@@ -102,8 +88,8 @@ public class ExternalDataFileInput {
              * Client Library Tutorial on the DeployR website for
              * further details.
              */
-            ProjectExecutionOptions options =
-                new ProjectExecutionOptions();
+            AnonymousProjectExecutionOptions options =
+                    new AnonymousProjectExecutionOptions();
 
             /* 
              * Load an R object literal "hipStarUrl" into the
@@ -119,77 +105,54 @@ public class ExternalDataFileInput {
             List<RData> rinputs = Arrays.asList(hipStarUrl);
             options.rinputs = rinputs;
 
-            log.info("R object literal input set on execution, " +
+            log.info("External data source input set on execution, " +
                                                     hipStarUrl);
 
             /*
-             * Request the retrieval of two vector objects and a 
-             * data.frame from the workspace following the execution.
-             * The corresponding R objects are named as follows:
-             * 'hipDim', 'hipNames', 'hipSubset'.
-             */
-            options.routputs =
-                Arrays.asList("hipDim", "hipNames", "hipSubset");
-
-            /*
-             * Execute a public analytics Web service as an authenticated
+             * Execute a public analytics Web service as an anonymous
              * user based on a repository-managed R script:
              * /testuser/example-data-io/hipStar.R
              */
-            RProjectExecution exec =
-                    rProject.executeScript("hipStar.R",
+            RScriptExecution exec =
+                    rClient.executeScript("hipStar.R",
                             "example-data-io", "testuser", null, options);
 
-            log.info("Project script " +
-                    "execution completed, rProjectExecution=" + exec);
+            log.info("R script execution completed, " +
+                                        "rScriptExecution=" + exec);
 
             /*
-             * Retrieve the requested R object data encodings from
-             * the results of the script execution. 
+             * Retrieve the working directory file (artifact) called
+             * hip.csv that was generated by the execution.
              *
-             * See the R Object Data Decoding chapter in the
-             * Client Library Tutorial on the DeployR website for
-             * further details.
+             * Outputs generated by an execution can be used in any
+             * number of ways by client applications, including:
+             *
+             * 1. Use output data to perform further calculations.
+             * 2. Display output data to an end-user.
+             * 3. Write output data to a database.
+             * 4. Pass output data along to another Web service.
+             * 5. etc.
              */
-            String console = exec.about().console;
-            List<RData> objects = exec.about().workspaceObjects;
+            List<RProjectFile> wdFiles = exec.about().artifacts;
 
-            for(RData rData : objects) {
-                log.info("Encoded R object " +
-                    rData.getName() + " returned, class=" + rData);
-                if(rData instanceof RNumericVector) {
-                    List<Double> hipDimVal =
-                        ((RNumericVector) rData).getValue();
-                    log.info("Encoded R object, hipDim=" + hipDimVal);
-                } else
-                if(rData instanceof RStringVector) {
-                    List<String> hipNamesVal =
-                        ((RStringVector) rData).getValue();
-                    log.info("Encoded R object, hipNames=" + hipNamesVal);
-                } else
-                if(rData instanceof RDataFrame) {
-                    List<RData> hipSubsetVal =
-                        ((RDataFrame) rData).getValue();
-                } else {
-                    log.info("Unexpected R object data type returned, " +
-                        "object name=" + rData.getName() + ", encoding=" +
-                                                        rData.getClass());
+            for(RProjectFile wdFile : wdFiles) {
+                if(wdFile.about().filename.equals("hip.csv")) {
+                    log.info("Retrieved working directory " +
+                        "data file output " + wdFile.about().filename +
+                        ", rProjectFile=" + wdFile);
+
+                    InputStream fis = null;
+                    try { fis = wdFile.download(); } catch(Exception ex) {
+                        log.warn("Working directory data file " + ex);
+                    } finally {
+                        IOUtils.closeQuietly(fis);
+                    }
                 }
             }
-
 
         } catch (Exception ex) {
             log.warn("Unexpected runtime exception=" + ex);
         } finally {
-
-            try {
-                if (rProject != null) {
-                    /*
-                     * Close rProject before application exits.
-                     */
-                    rProject.close();
-                }
-            } catch (Exception fex) { }
             try {
                 if (rClient != null) {
                     /*
@@ -197,7 +160,8 @@ public class ExternalDataFileInput {
                      */
                     rClient.release();
                 }
-            } catch (Exception fex) { }
+            } catch (Exception fex) {
+            }
         }
 
     }

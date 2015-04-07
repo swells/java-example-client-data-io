@@ -1,5 +1,5 @@
 /*
- * RepoBinaryFileInput.java
+ * MultipleDataInMultipleDataOut.java
  *
  * Copyright (C) 2010-2015 by Revolution Analytics Inc.
  *
@@ -19,12 +19,21 @@ import com.revo.deployr.client.params.*;
 import com.revo.deployr.client.auth.RAuthentication;
 import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import java.util.*;
+import java.io.*;
+import java.net.*;
+import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
-public class RepoBinaryFileInput {
+public class MultipleDataInMultipleDataOut {
 
-    private static Logger log = Logger.getLogger(RepoBinaryFileInput.class);
+    private static Logger log = Logger.getLogger(MultipleDataInMultipleDataOut.class);
+
+    /*
+     * Hipparcos star dataset URL endpoint.
+     */
+    private static String HIP_DAT_URL =
+        "http://astrostatistics.psu.edu/datasets/HIP_star.dat";
 
     public static void main(String args[]) throws Exception {
 
@@ -82,10 +91,27 @@ public class RepoBinaryFileInput {
             AnonymousProjectExecutionOptions options =
                     new AnonymousProjectExecutionOptions();
 
+            /*
+             * MultipleDataInMultipleDataOut Example Note:
+             * 
+             * The inputs sent on this example are contrived
+             * and superfluous as the hipStar.rData binary R
+             * object input and the hipStarUrl input perform
+             * the exact same purpose...to load the Hip STAR
+             * dataset into the workspace ahead of execution.
+             * 
+             * The example is provided to simply demonstrate
+             * the mechanism of specifying multiple inputs.
+             */
+
             /* 
              * Preload from the DeployR repository the following
              * binary R object input file:
              * /testuser/example-data-io/hipStar.rData
+             *
+             * As this is an anonymous operation "hipStar.rData"
+             * must have it's repository-managed access controls
+             * set to "public".
              */
             ProjectPreloadOptions preloadWorkspace =
                                 new ProjectPreloadOptions();
@@ -94,20 +120,38 @@ public class RepoBinaryFileInput {
             preloadWorkspace.author = "testuser";
             options.preloadWorkspace = preloadWorkspace;
 
-            log.info("Binary input file set for preload, " +
+            log.info("Binary file input set on execution, " +
                                             preloadWorkspace);
 
-            /*
-             * Request the retrieval of two vector objects and a 
-             * data.frame from the workspace following the execution.
-             * The corresponding R objects are named as follows:
-             * 'hipDim', 'hipNames', 'hipSubset'.
+            /* 
+             * Load an R object literal "hipStarUrl" into the
+             * workspace prior to script execution.
+             *
+             * The R script checks for the existence of "hipStarUrl"
+             * in the workspace and if present uses the URL path
+             * to load the Hipparcos star dataset from the DAT file
+             * at that location.
              */
-            options.routputs =
-                Arrays.asList("hipDim", "hipNames", "hipSubset");
+            RData hipStarUrl =
+                RDataFactory.createString("hipStarUrl", HIP_DAT_URL);
+            List<RData> rinputs = Arrays.asList(hipStarUrl);
+            options.rinputs = rinputs;
+
+            log.info("External data source input set on execution, " +
+                                                    hipStarUrl);
 
             /*
-             * Execute a public analytics Web service as an authenticated
+             * Request the retrieval of the "hip" data.frame and
+             * two vector objects from the workspace following the
+             * execution. The corresponding R objects are named as
+             * follows:
+             * 'hip', hipDim', 'hipNames'.
+             */
+            options.routputs =
+                Arrays.asList("hip", "hipDim", "hipNames");
+
+            /*
+             * Execute a public analytics Web service as an anonymous
              * user based on a repository-managed R script:
              * /testuser/example-data-io/hipStar.R
              */
@@ -115,43 +159,94 @@ public class RepoBinaryFileInput {
                     rClient.executeScript("hipStar.R",
                             "example-data-io", "testuser", null, options);
 
-            log.info("Script execution completed, " +
+            log.info("R script execution completed, " +
                                         "rScriptExecution=" + exec);
 
             /*
+             * Retrieve multiple outputs following the execution:
+             *
+             * 1. R console output.
+             * 2. R console output.
+             * 3. R console output.
+             * 4. R console output.
+             * 5. R console output.
+             */
+
+            String console = exec.about().console;
+            log.info("Retrieved R console output.");
+
+            /*
              * Retrieve the requested R object data encodings from
-             * the results of the script execution. 
+             * the workspace follwing the script execution. 
              *
              * See the R Object Data Decoding chapter in the
              * Client Library Tutorial on the DeployR website for
              * further details.
              */
-            String console = exec.about().console;
             List<RData> objects = exec.about().workspaceObjects;
 
             for(RData rData : objects) {
-                log.info("Encoded R object " +
-                    rData.getName() + " returned, class=" + rData);
+                log.info("Retrieved DeployR-encoded output " +
+                    rData.getName() + ", class=" + rData);
+                if(rData instanceof RDataFrame) {
+                    List<RData> hipSubsetVal =
+                        ((RDataFrame) rData).getValue();
+                } else
                 if(rData instanceof RNumericVector) {
                     List<Double> hipDimVal =
                         ((RNumericVector) rData).getValue();
-                    log.info("Encoded R object, hipDim=" + hipDimVal);
+                    log.info("Retrieved DeployR-encoded output " +
+                        rData.getName() + ", value=" + hipDimVal);
                 } else
                 if(rData instanceof RStringVector) {
                     List<String> hipNamesVal =
                         ((RStringVector) rData).getValue();
-                    log.info("Encoded R object, hipNames=" + hipNamesVal);
-                } else
-                if(rData instanceof RDataFrame) {
-                    List<RData> hipSubsetVal =
-                        ((RDataFrame) rData).getValue();
+                    log.info("Retrieved DeployR-encoded output " +
+                        rData.getName() + ", value=" + hipNamesVal);
                 } else {
-                    log.info("Unexpected R object data type returned, " +
+                    log.info("Unexpected DeployR-encoded data type returned, " +
                         "object name=" + rData.getName() + ", encoding=" +
                                                         rData.getClass());
                 }
             }
 
+            /*
+             * Retrieve the working directory files (artifact)
+             * was generated by the execution.
+             */
+            List<RProjectFile> wdFiles = exec.about().artifacts;
+
+            for(RProjectFile wdFile : wdFiles) {
+                log.info("Retrieved working directory " +
+                    "binary file output " + wdFile.about().filename +
+                    ", rProjectFile=" + wdFile);
+
+                InputStream fis = null;
+                try { fis = wdFile.download(); } catch(Exception ex) {
+                    log.warn("Working directory binary file " + ex);
+                } finally {
+                    IOUtils.closeQuietly(fis);
+                }
+            }
+
+            /*
+             * Retrieve R graphics device plots (results) called
+             * unnamedplot*.png that was generated by the execution.
+             */
+            List<RProjectResult> results = exec.about().results;
+
+            for(RProjectResult result : results) {
+                log.info("Retrieved graphics device " +
+                    "plot output " + result.about().filename +
+                    ", rProjectResult=" + result);
+
+                InputStream fis = null;
+                try { fis = result.download(); } catch(Exception ex) {
+                    log.warn("Graphics device plot " + ex);
+                } finally {
+                    IOUtils.closeQuietly(fis);
+                }
+            }
 
         } catch (Exception ex) {
             log.warn("Unexpected runtime exception=" + ex);

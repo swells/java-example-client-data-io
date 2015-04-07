@@ -1,5 +1,5 @@
 /*
- * RepoDataFileInput.java
+ * RepoFileInEncodedDataOut.java
  *
  * Copyright (C) 2010-2015 by Revolution Analytics Inc.
  *
@@ -22,9 +22,9 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 
-public class RepoDataFileInput {
+public class RepoFileInEncodedDataOut {
 
-    private static Logger log = Logger.getLogger(RepoDataFileInput.class);
+    private static Logger log = Logger.getLogger(RepoFileInEncodedDataOut.class);
 
     public static void main(String args[]) throws Exception {
 
@@ -66,7 +66,7 @@ public class RepoDataFileInput {
              */
             RUser rUser = rClient.login(rAuth);
             log.info("Upgraded to authenticated " +
-                    "connection for rUser=" + rUser);
+                    "connection, rUser=" + rUser);
 
             /*
              * Create a temporary project (R session).
@@ -102,27 +102,32 @@ public class RepoDataFileInput {
 
             /* 
              * Preload from the DeployR repository the following
-             * data input file:
-             * /testuser/example-data-io/hipStar.dat
+             * binary R object input file:
+             * /testuser/example-data-io/hipStar.rData
+             *
+             * As this is an anonymous operation "hipStar.rData"
+             * must have it's repository-managed access controls
+             * set to "public".
              */
-            ProjectPreloadOptions preloadDirectory =
+            ProjectPreloadOptions preloadWorkspace =
                                 new ProjectPreloadOptions();
-            preloadDirectory.filename = "hipStar.dat";
-            preloadDirectory.directory = "example-data-io";
-            preloadDirectory.author = "testuser";
-            options.preloadDirectory = preloadDirectory;
+            preloadWorkspace.filename = "hipStar.rData";
+            preloadWorkspace.directory = "example-data-io";
+            preloadWorkspace.author = "testuser";
+            options.preloadWorkspace = preloadWorkspace;
 
-            log.info("Data input file set for preload, " +
-                                            preloadDirectory);
+            log.info("Binary file input set on execution, " +
+                                            preloadWorkspace);
 
             /*
-             * Request the retrieval of two vector objects and a 
-             * data.frame from the workspace following the execution.
-             * The corresponding R objects are named as follows:
-             * 'hipDim', 'hipNames', 'hipSubset'.
+             * Request the retrieval of the "hip" data.frame and
+             * two vector objects from the workspace following the
+             * execution. The corresponding R objects are named as
+             * follows:
+             * 'hip', hipDim', 'hipNames'.
              */
             options.routputs =
-                Arrays.asList("hipDim", "hipNames", "hipSubset");
+                Arrays.asList("hip", "hipDim", "hipNames");
 
             /*
              * Execute a public analytics Web service as an authenticated
@@ -144,27 +149,28 @@ public class RepoDataFileInput {
              * Client Library Tutorial on the DeployR website for
              * further details.
              */
-            String console = exec.about().console;
             List<RData> objects = exec.about().workspaceObjects;
 
             for(RData rData : objects) {
-                log.info("Encoded R object " +
-                    rData.getName() + " returned, class=" + rData);
+                log.info("Retrieved DeployR-encoded output " +
+                    rData.getName() + ", class=" + rData);
+                if(rData instanceof RDataFrame) {
+                    List<RData> hipSubsetVal =
+                        ((RDataFrame) rData).getValue();
+                } else
                 if(rData instanceof RNumericVector) {
                     List<Double> hipDimVal =
                         ((RNumericVector) rData).getValue();
-                    log.info("Encoded R object, hipDim=" + hipDimVal);
+                    log.info("Retrieved DeployR-encoded output " +
+                        rData.getName() + ", value=" + hipDimVal);
                 } else
                 if(rData instanceof RStringVector) {
                     List<String> hipNamesVal =
                         ((RStringVector) rData).getValue();
-                    log.info("Encoded R object, hipNames=" + hipNamesVal);
-                } else
-                if(rData instanceof RDataFrame) {
-                    List<RData> hipSubsetVal =
-                        ((RDataFrame) rData).getValue();
+                    log.info("Retrieved DeployR-encoded output " +
+                        rData.getName() + ", value=" + hipNamesVal);
                 } else {
-                    log.info("Unexpected R object data type returned, " +
+                    log.info("Unexpected DeployR-encoded data type returned, " +
                         "object name=" + rData.getName() + ", encoding=" +
                                                         rData.getClass());
                 }
@@ -174,7 +180,6 @@ public class RepoDataFileInput {
         } catch (Exception ex) {
             log.warn("Unexpected runtime exception=" + ex);
         } finally {
-
             try {
                 if (rProject != null) {
                     /*

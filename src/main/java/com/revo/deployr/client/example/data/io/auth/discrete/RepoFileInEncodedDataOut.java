@@ -1,5 +1,5 @@
 /*
- * RepoBinaryFileInput.java
+ * RepoFileInEncodedDataOut.java
  *
  * Copyright (C) 2010-2015 by Revolution Analytics Inc.
  *
@@ -10,7 +10,7 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.auth.stateful;
+package com.revo.deployr.client.example.data.io.auth.discrete;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
@@ -22,14 +22,13 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 
-public class RepoBinaryFileInput {
+public class RepoFileInEncodedDataOut {
 
-    private static Logger log = Logger.getLogger(RepoBinaryFileInput.class);
+    private static Logger log = Logger.getLogger(RepoFileInEncodedDataOut.class);
 
     public static void main(String args[]) throws Exception {
 
         RClient rClient = null;
-        RProject rProject = null;
 
         try {
 
@@ -66,28 +65,11 @@ public class RepoBinaryFileInput {
              */
             RUser rUser = rClient.login(rAuth);
             log.info("Upgraded to authenticated " +
-                    "connection for rUser=" + rUser);
+                    "connection, rUser=" + rUser);
 
             /*
-             * Create a temporary project (R session).
-             *
-             * Optionally:
-             * ProjectCreationOptions options =
-             * new ProjectCreationOptions();
-             *
-             * Populate options as needed, then:
-             *
-             * rProject = rUser.createProject(options);
-             */
-            rProject = rUser.createProject();
-
-            log.info("Created stateful temporary " +
-                    "R session, rProject=" + rProject);
-
-            /*
-             * Create a ProjectExecutionOptions instance
-             * to specify data inputs and output to the
-             * execution of the repository-managed R script.
+             * Create the AnonymousProjectExecutionOptions object·
+             * to specify data inputs and output to the script.
              *
              * This options object can be used to pass standard
              * execution model parameters on execution calls. All
@@ -97,13 +79,17 @@ public class RepoBinaryFileInput {
              * Client Library Tutorial on the DeployR website for
              * further details.
              */
-            ProjectExecutionOptions options =
-                new ProjectExecutionOptions();
+            AnonymousProjectExecutionOptions options =
+                    new AnonymousProjectExecutionOptions();
 
             /* 
              * Preload from the DeployR repository the following
              * binary R object input file:
              * /testuser/example-data-io/hipStar.rData
+             *
+             * As this is an anonymous operation "hipStar.rData"
+             * must have it's repository-managed access controls
+             * set to "public".
              */
             ProjectPreloadOptions preloadWorkspace =
                                 new ProjectPreloadOptions();
@@ -112,29 +98,30 @@ public class RepoBinaryFileInput {
             preloadWorkspace.author = "testuser";
             options.preloadWorkspace = preloadWorkspace;
 
-            log.info("Binary input file set for preload, " +
+            log.info("Binary file input set on execution, " +
                                             preloadWorkspace);
 
             /*
-             * Request the retrieval of two vector objects and a 
-             * data.frame from the workspace following the execution.
-             * The corresponding R objects are named as follows:
-             * 'hipDim', 'hipNames', 'hipSubset'.
+             * Request the retrieval of the "hip" data.frame and
+             * two vector objects from the workspace following the
+             * execution. The corresponding R objects are named as
+             * follows:
+             * 'hip', hipDim', 'hipNames'.
              */
             options.routputs =
-                Arrays.asList("hipDim", "hipNames", "hipSubset");
+                Arrays.asList("hip", "hipDim", "hipNames");
 
             /*
-             * Execute a public analytics Web service as an authenticated
+             * Execute a public analytics Web service as an anonymous
              * user based on a repository-managed R script:
              * /testuser/example-data-io/hipStar.R
              */
-            RProjectExecution exec =
-                    rProject.executeScript("hipStar.R",
+            RScriptExecution exec =
+                    rClient.executeScript("hipStar.R",
                             "example-data-io", "testuser", null, options);
 
-            log.info("Project script " +
-                    "execution completed, rProjectExecution=" + exec);
+            log.info("R script execution completed, " +
+                                        "rScriptExecution=" + exec);
 
             /*
              * Retrieve the requested R object data encodings from
@@ -144,27 +131,28 @@ public class RepoBinaryFileInput {
              * Client Library Tutorial on the DeployR website for
              * further details.
              */
-            String console = exec.about().console;
             List<RData> objects = exec.about().workspaceObjects;
 
             for(RData rData : objects) {
-                log.info("Encoded R object " +
-                    rData.getName() + " returned, class=" + rData);
+                log.info("Retrieved DeployR-encoded output " +
+                    rData.getName() + ", class=" + rData);
+                if(rData instanceof RDataFrame) {
+                    List<RData> hipSubsetVal =
+                        ((RDataFrame) rData).getValue();
+                } else
                 if(rData instanceof RNumericVector) {
                     List<Double> hipDimVal =
                         ((RNumericVector) rData).getValue();
-                    log.info("Encoded R object, hipDim=" + hipDimVal);
+                    log.info("Retrieved DeployR-encoded output " +
+                        rData.getName() + ", value=" + hipDimVal);
                 } else
                 if(rData instanceof RStringVector) {
                     List<String> hipNamesVal =
                         ((RStringVector) rData).getValue();
-                    log.info("Encoded R object, hipNames=" + hipNamesVal);
-                } else
-                if(rData instanceof RDataFrame) {
-                    List<RData> hipSubsetVal =
-                        ((RDataFrame) rData).getValue();
+                    log.info("Retrieved DeployR-encoded output " +
+                        rData.getName() + ", value=" + hipNamesVal);
                 } else {
-                    log.info("Unexpected R object data type returned, " +
+                    log.info("Unexpected DeployR-encoded data type returned, " +
                         "object name=" + rData.getName() + ", encoding=" +
                                                         rData.getClass());
                 }
@@ -174,15 +162,6 @@ public class RepoBinaryFileInput {
         } catch (Exception ex) {
             log.warn("Unexpected runtime exception=" + ex);
         } finally {
-
-            try {
-                if (rProject != null) {
-                    /*
-                     * Close rProject before application exits.
-                     */
-                    rProject.close();
-                }
-            } catch (Exception fex) { }
             try {
                 if (rClient != null) {
                     /*

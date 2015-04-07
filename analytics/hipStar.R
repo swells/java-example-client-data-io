@@ -18,6 +18,14 @@ if(file.exists('hipStar.dat')) {
 }
   
 # Example R Script outputs.
+#
+# Numeric vector.
 hipDim = dim(hip)
+# String vector.
 hipNames = names(hip)
-hipSubset = hip[1:10,]
+# Binary file.
+save(hip, file = "hip.rData")
+# Data file.
+write.csv(hip, file = "hip.csv")
+# Graphics device generated plot.
+plot(hip[1:100,])

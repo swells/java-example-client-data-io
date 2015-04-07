@@ -10,7 +10,7 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.anon;
+package com.revo.deployr.client.example.data.io.anon.discrete;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
@@ -84,10 +84,10 @@ public class RepoFileInGraphicsPlotOut {
             /*
              * Execute a public analytics Web service as an anonymous
              * user based on a repository-managed R script:
-             * /testuser/example-data-io/hipStar.R
+             * /testuser/example-data-io/dataIO.R
              */
             RScriptExecution exec =
-                    rClient.executeScript("hipStar.R",
+                    rClient.executeScript("dataIO.R",
                             "example-data-io", "testuser", null, options);
 
             log.info("R script execution completed, " +

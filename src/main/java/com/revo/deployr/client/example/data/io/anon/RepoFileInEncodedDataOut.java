@@ -1,5 +1,5 @@
 /*
- * RepoBinaryFileInput.java
+ * RepoFileInEncodedDataOut.java
  *
  * Copyright (C) 2010-2015 by Revolution Analytics Inc.
  *
@@ -20,9 +20,9 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 
-public class RepoBinaryFileInput {
+public class RepoFileInEncodedDataOut {
 
-    private static Logger log = Logger.getLogger(RepoBinaryFileInput.class);
+    private static Logger log = Logger.getLogger(RepoFileInEncodedDataOut.class);
 
     public static void main(String args[]) throws Exception {
 
@@ -78,17 +78,18 @@ public class RepoBinaryFileInput {
             preloadWorkspace.author = "testuser";
             options.preloadWorkspace = preloadWorkspace;
 
-            log.info("Binary input file set for preload, " +
+            log.info("Binary file input set on execution, " +
                                             preloadWorkspace);
 
             /*
-             * Request the retrieval of two vector objects and a 
-             * data.frame from the workspace following the execution.
-             * The corresponding R objects are named as follows:
-             * 'hipDim', 'hipNames', 'hipSubset'.
+             * Request the retrieval of the "hip" data.frame and
+             * two vector objects from the workspace following the
+             * execution. The corresponding R objects are named as
+             * follows:
+             * 'hip', hipDim', 'hipNames'.
              */
             options.routputs =
-                Arrays.asList("hipDim", "hipNames", "hipSubset");
+                Arrays.asList("hip", "hipDim", "hipNames");
 
             /*
              * Execute a public analytics Web service as an anonymous
@@ -99,7 +100,7 @@ public class RepoBinaryFileInput {
                     rClient.executeScript("hipStar.R",
                             "example-data-io", "testuser", null, options);
 
-            log.info("Script execution completed, " +
+            log.info("R script execution completed, " +
                                         "rScriptExecution=" + exec);
 
             /*
@@ -110,27 +111,28 @@ public class RepoBinaryFileInput {
              * Client Library Tutorial on the DeployR website for
              * further details.
              */
-            String console = exec.about().console;
             List<RData> objects = exec.about().workspaceObjects;
 
             for(RData rData : objects) {
-                log.info("Encoded R object " +
-                    rData.getName() + " returned, class=" + rData);
+                log.info("Retrieved DeployR-encoded output " +
+                    rData.getName() + ", class=" + rData);
+                if(rData instanceof RDataFrame) {
+                    List<RData> hipSubsetVal =
+                        ((RDataFrame) rData).getValue();
+                } else
                 if(rData instanceof RNumericVector) {
                     List<Double> hipDimVal =
                         ((RNumericVector) rData).getValue();
-                    log.info("Encoded R object, hipDim=" + hipDimVal);
+                    log.info("Retrieved DeployR-encoded output " +
+                        rData.getName() + ", value=" + hipDimVal);
                 } else
                 if(rData instanceof RStringVector) {
                     List<String> hipNamesVal =
                         ((RStringVector) rData).getValue();
-                    log.info("Encoded R object, hipNames=" + hipNamesVal);
-                } else
-                if(rData instanceof RDataFrame) {
-                    List<RData> hipSubsetVal =
-                        ((RDataFrame) rData).getValue();
+                    log.info("Retrieved DeployR-encoded output " +
+                        rData.getName() + ", value=" + hipNamesVal);
                 } else {
-                    log.info("Unexpected R object data type returned, " +
+                    log.info("Unexpected DeployR-encoded data type returned, " +
                         "object name=" + rData.getName() + ", encoding=" +
                                                         rData.getClass());
                 }

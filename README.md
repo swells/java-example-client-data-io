@@ -92,7 +92,7 @@ These examples demonstrate data I/O on executions of R code and R scripts by aut
 
 Use the DeployR CLI to download and run the examples.
 
-### Authenticated Stateful Execution Data I/O Examples
+### Authenticated Stateful Preload & Execution Data I/O Examples
 
 ```
 Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/preload/*

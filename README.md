@@ -3,6 +3,8 @@ java-example-client-data-io
 
 The following examples demonstrate how different types of data inputs and outputs can be sent to and retrieved from [DeployR-managed](http://deployr.revolutionanalytics.com) R sessions when executing R code or R scripts using the [DeployR client library](http://deployr.revolutionanalytics.com/dev).
 
+### About: DeployR Inputs
+
 DeployR supports the following types of data inputs:
 
 1. [DeployR-encoded](http://deployr.revolutionanalytics.com/dev/encoding) application generated data, including data read from databases, data input by end-users, or data otherwise derived by your application logic. These data can be sent as inputs and automatically decoded into the workspace of an R session when executing R code or an R script.
@@ -12,6 +14,8 @@ DeployR supports the following types of data inputs:
 3. References to repository-managed data files (csv, dat, xls, etc) that cause the corresponding file data to be loaded into the working directory of an R session when executing R code or an R script.
 
 4. References to external data sources, including URLs, external Web service endpoints or database connection endpoints along with associated credentials and/or record identifiers. These data can be sent as inputs and automatically decoded into the workspace and then used to load data directly into an R session when executing R code or an R script.
+
+### About: DeployR Outputs
 
 DeployR supports the following types of data outputs:
 

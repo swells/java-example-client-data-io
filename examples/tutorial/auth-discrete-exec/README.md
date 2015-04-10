@@ -1,8 +1,7 @@
-Authenticated Discrete Execution Data I/O
-=========================================
+## Tutorial: Authenticated Discrete Execution Data I/O
 
 ```
-Tutorial Source: src/main/java/com/revo/deployr/client/example/data/io/auth/discrete/exec/*
+Source: src/main/java/com/revo/deployr/client/example/data/io/auth/discrete/exec/*
 ```
 
 These examples demonstrate data I/O on discrete executions of R scripts by authenticated users on stateless projects.

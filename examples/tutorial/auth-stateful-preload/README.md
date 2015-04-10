@@ -1,8 +1,7 @@
-Authenticated Stateful Preload & Execution Data I/O
-===================================================
+## Tutorial: Authenticated Stateful Preload & Execution Data I/O
 
 ```
-Tutorial Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/preload/*
+Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/preload/*
 ```
 
 These examples demonstrate data I/O on project initialization, prior to executions of R code and R scripts by authenticated users on stateful projects.

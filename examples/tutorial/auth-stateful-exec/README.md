@@ -1,8 +1,7 @@
-Authenticated Stateful Execution Data I/O
-=========================================
+## Tutorial: Authenticated Stateful Execution Data I/O
 
 ```
-Tutorial Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/exec/*
+Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/exec/*
 ```
 
 These examples demonstrate data I/O on executions of R code and R scripts by authenticated users on stateful projects.

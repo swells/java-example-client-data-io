@@ -1,19 +1,17 @@
-java-example-data-io
-====================
+java-example-client-data-io
+===========================
 
-Example use of data inputs and outputs when executing R code or R scripts on [DeployR-managed](http://deployr.revolutionanalytics.com) R sessions.
-
-## About
-
-These examples demonstrate how different types of data inputs and outputs
-can be sent to and retrieved from DeployR-managed R sessions when executing R code or R scripts using the [DeployR client library](http://deployr.revolutionanalytics.com/dev).
+These examples demonstrate how different types of data inputs and outputs can be sent to and retrieved from [DeployR-managed](http://deployr.revolutionanalytics.com) R sessions when executing R code or R scripts using the [DeployR client library](http://deployr.revolutionanalytics.com/dev).
 
 DeployR supports the following types of data inputs:
 
-1. [DeployR-encoded](http://deployr.revolutionanalytics.com/dev/encoding) application generated data (database, calculated, user input, etc) that can be decoded into the workspace of an R session when executing R code or an R script.
+1. [DeployR-encoded](http://deployr.revolutionanalytics.com/dev/encoding) application generated data, including data read from databases, data input by end-users, or data otherwise derived by your application logic. These data can be sent as inputs and automatically decoded into the workspace of an R session when executing R code or an R script.
+
 2. References to repository-managed binary data files (rData) that cause the corresponding file data to be loaded into the workspace of an R session when executing R code or an R script.
+
 3. References to repository-managed data files (csv, dat, xls, etc) that cause the corresponding file data to be loaded into the working directory of an R session when executing R code or an R script.
-4. References to external data sources (URL, Web services, database, etc) that can be used to load data directly into an R session when executing R code or an R script.
+
+4. References to external data sources, including URLs, external Web services endpoints or database connection endpoints along with associated credentials and/or record identifiers. These data can be sent as inputs and automatically decoded into the workspace and then used to load data directly into an R session when executing R code or an R script.
 
 DeployR supports the following types of data outputs:
 
@@ -30,62 +28,11 @@ Authenticated (trusted) users can execute both R code and repository-managed R s
 
 Authenticated users can use the full set of data inputs and outputs indicated above.
 
-### Authenticated Discrete Execution Data I/O Examples
+The following tutorials demonstrate the data I/O options available to authenticated users:
 
-```
-Source: src/main/java/com/revo/deployr/client/example/data/io/auth/discrete/exec/*
-```
-
-These examples demonstrate data I/O on discrete executions of R scripts by authenticated users on stateless projects.
-
-| Example Source File | Example Data Input | Example Data Output |
-| ------------------- | ------------------ | ------------------- |
-| EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
-| RepoFileInDataEncodedOut | Reference to repository-managed binary file | DeployR-encoded workspace data |
-| RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
-| ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
-| RepoFileInRepoFileOut | DeployR-encoded application data | Reference to stored repository-managed file |
-| MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
-
-Use the DeployR CLI to download and run the examples.
-
-### Authenticated Stateful Execution Data I/O Examples
-
-```
-Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/exec/*
-```
-
-These examples demonstrate data I/O on executions of R code and R scripts by authenticated users on stateful projects.
-
-| Example Source File | Example Data Input | Example Data Output |
-| ------------------- | ------------------ | ------------------- |
-| EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
-| RepoFileInDataEncodedOut | Reference to repository-managed binary file | DeployR-encoded workspace data |
-| RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
-| ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
-| RepoFileInRepoFileOut | DeployR-encoded application data | Reference to stored repository-managed file |
-| MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
-
-Use the DeployR CLI to download and run the examples.
-
-### Authenticated Stateful Preload & Execution Data I/O Examples
-
-```
-Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/preload/*
-```
-
-These examples demonstrate data I/O on project initialization, prior to executions of R code and R scripts by authenticated users on stateful projects.
-
-| Example Source File | Example Data Input | Example Data Output |
-| ------------------- | ------------------ | ------------------- |
-| EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
-| RepoFileInDataEncodedOut | Reference to repository-managed binary file | DeployR-encoded workspace data |
-| RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
-| ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
-| RepoFileInRepoFileOut | DeployR-encoded application data | Reference to stored repository-managed file |
-| MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
-
-Use the DeployR CLI to download and run the examples.
+- [Discrete Execution Data I/O](examples/tutorial/auth-discrete-exec)
+- [Stateful Execution Data I/O](examples/tutorial/auth-stateful-exec)
+- [Stateful Preload & Execution Data I/O](examples/tutorial/auth-stateful-preload)
 
 ## Anonymous Users & Data I/O
 
@@ -93,25 +40,12 @@ Anonymous (untrusted) users can only execute repository-managed R scripts that h
 
 Anonymous users can use the full set of data inputs and outputs indicated above with a single exception: anonymous users can not cause data or binary files to be stored into the DeployR-repository and as such can not retrieve references to repository-managed data or binary files following an execution.
 
-### Anonymous Discrete Execution Data I/O Examples
+The following tutorial demonstrate the data I/O options available to anonymous users:
 
-```
-Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec/*.java
-```
+- [Discrete Execution Data I/O](examples/tutorial/anon-discrete-exec)
 
-These examples demonstrate data I/O on discrete executions of R scripts by anonymous users on stateless projects.
 
-| Example Source File | Example Data Input | Example Data Output |
-| ------------------- | ------------------ | ------------------- |
-| EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
-| RepoFileInDataEncodedOut | Reference to repository-managed binary file | DeployR-encoded workspace data |
-| RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
-| ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
-| MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
-
-Use the DeployR CLI to download and run the examples.
-
-## Example R Analytics
+## R Analytics Example Dependencies
 
 ```
 Source: analytics/*

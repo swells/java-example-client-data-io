@@ -1,11 +1,5 @@
-Anonymous Users & Data I/O
-==========================
-
-Anonymous (untrusted) users can only execute repository-managed R scripts that have been assigned _public_ access privileges by authenticated (trusted) users.
-
-Anonymous users can use the full set of data inputs and outputs indicated above with a single exception: anonymous users can not cause data or binary files to be stored into the DeployR-repository and as such can not retrieve references to repository-managed data or binary files following an execution.
-
-### Anonymous Discrete Execution Data I/O Examples
+Tutorial: Anonymous Discrete Execution Data I/O
+===============================================
 
 ```
 Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec/*.java

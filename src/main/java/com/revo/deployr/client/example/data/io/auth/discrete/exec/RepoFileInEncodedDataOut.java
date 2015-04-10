@@ -10,12 +10,14 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.anon.discrete;
+package com.revo.deployr.client.example.data.io.auth.discrete.exec;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
 import com.revo.deployr.client.factory.*;
 import com.revo.deployr.client.params.*;
+import com.revo.deployr.client.auth.RAuthentication;
+import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -34,7 +36,7 @@ public class RepoFileInEncodedDataOut {
              * Determine DeployR server endpoint.
              */
             String endpoint = System.getProperty("endpoint");
-            log.info("Using endpoint=" + endpoint);
+            log.info("[ CONFIGURATION  ] Using endpoint=" + endpoint);
 
             /*
              * Establish RClient connection to DeployR server.
@@ -44,8 +46,26 @@ public class RepoFileInEncodedDataOut {
              */
             rClient = RClientFactory.createClient(endpoint);
 
-            log.info("Established anonymous " +
-                    "connection, rClient=" + rClient);
+            log.info("[   CONNECTION   ] Established anonymous " +
+                    "connection [ RClient ].");
+
+            /*
+             * Build a basic authentication token.
+             */
+            RAuthentication rAuth =
+                    new RBasicAuthentication(System.getProperty("username"),
+                            System.getProperty("password"));
+
+            /*
+             * Establish an authenticated handle with the DeployR
+             * server, rUser. Following this call the rClient 
+             * connection is operating as an authenticated connection
+             * and all calls on rClient inherit the access permissions
+             * of the authenticated user, rUser.
+             */
+            RUser rUser = rClient.login(rAuth);
+            log.info("[ AUTHENTICATION ] Upgraded to authenticated " +
+                    "connection [ RUser ].");
 
             /*
              * Create the AnonymousProjectExecutionOptions object·
@@ -66,10 +86,6 @@ public class RepoFileInEncodedDataOut {
              * Preload from the DeployR repository the following
              * binary R object input file:
              * /testuser/example-data-io/hipStar.rData
-             *
-             * As this is an anonymous operation "hipStar.rData"
-             * must have it's repository-managed access controls
-             * set to "public".
              */
             ProjectPreloadOptions preloadWorkspace =
                                 new ProjectPreloadOptions();
@@ -78,8 +94,8 @@ public class RepoFileInEncodedDataOut {
             preloadWorkspace.author = "testuser";
             options.preloadWorkspace = preloadWorkspace;
 
-            log.info("Binary file input set on execution, " +
-                                            preloadWorkspace);
+            log.info("[   DATA INPUT   ] Repository binary file input " +
+                "set on execution, [ ProjectExecutionOptions.preloadWorkspace ].");
 
             /*
              * Request the retrieval of the "hip" data.frame and
@@ -91,8 +107,11 @@ public class RepoFileInEncodedDataOut {
             options.routputs =
                 Arrays.asList("hip", "hipDim", "hipNames");
 
+            log.info("[  EXEC OPTION   ] DeployR-encoded R object request " +
+                "set on execution [ ProjectExecutionOptions.routputs ].");
+
             /*
-             * Execute a public analytics Web service as an anonymous
+             * Execute an analytics Web service as an authenticated
              * user based on a repository-managed R script:
              * /testuser/example-data-io/dataIO.R
              */
@@ -100,8 +119,8 @@ public class RepoFileInEncodedDataOut {
                     rClient.executeScript("dataIO.R",
                             "example-data-io", "testuser", null, options);
 
-            log.info("R script execution completed, " +
-                                        "rScriptExecution=" + exec);
+            log.info("[   EXECUTION    ] Discrete R script " +
+                    "execution completed [ RScriptExecution ].");
 
             /*
              * Retrieve the requested R object data encodings from
@@ -114,25 +133,31 @@ public class RepoFileInEncodedDataOut {
             List<RData> objects = exec.about().workspaceObjects;
 
             for(RData rData : objects) {
-                log.info("Retrieved DeployR-encoded output " +
-                    rData.getName() + ", class=" + rData);
                 if(rData instanceof RDataFrame) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RDataFrame ].");
                     List<RData> hipSubsetVal =
                         ((RDataFrame) rData).getValue();
                 } else
                 if(rData instanceof RNumericVector) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RNumericVector ].");
                     List<Double> hipDimVal =
                         ((RNumericVector) rData).getValue();
-                    log.info("Retrieved DeployR-encoded output " +
-                        rData.getName() + ", value=" + hipDimVal);
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object " + rData.getName() +
+                        " value=" + hipDimVal);
                 } else
                 if(rData instanceof RStringVector) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RStringVector ].");
                     List<String> hipNamesVal =
                         ((RStringVector) rData).getValue();
-                    log.info("Retrieved DeployR-encoded output " +
-                        rData.getName() + ", value=" + hipNamesVal);
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object " + rData.getName() +
+                        " value=" + hipNamesVal);
                 } else {
-                    log.info("Unexpected DeployR-encoded data type returned, " +
+                    log.info("Unexpected DeployR-encoded R object returned, " +
                         "object name=" + rData.getName() + ", encoding=" +
                                                         rData.getClass());
                 }

@@ -32,10 +32,10 @@ Anonymous users can use the full set of data inputs and outputs indicated above 
 ### Anonymous Discrete Execution Data I/O Examples
 
 ```
-Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/*.java
+Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec/*.java
 ```
 
-These examples demonstrate the anonymous use of stateless projects that support the discrete execution of R scripts.
+These examples demonstrate data I/O on discrete executions of R scripts by anonymous users on stateless projects.
 
 | Example Source File | Example Data Input | Example Data Output |
 | ------------------- | ------------------ | ------------------- |
@@ -57,10 +57,10 @@ Authenticated users can use the full set of data inputs and outputs indicated ab
 ### Authenticated Discrete Execution Data I/O Examples
 
 ```
-Source: src/main/java/com/revo/deployr/client/example/data/io/auth/discrete/*
+Source: src/main/java/com/revo/deployr/client/example/data/io/auth/discrete/exec/*
 ```
 
-These examples demonstrate the authenticated use of stateless projects that support the discrete execution of R scripts.
+These examples demonstrate data I/O on discrete executions of R scripts by authenticated users on stateless projects.
 
 | Example Source File | Example Data Input | Example Data Output |
 | ------------------- | ------------------ | ------------------- |
@@ -68,7 +68,7 @@ These examples demonstrate the authenticated use of stateless projects that supp
 | RepoFileInDataEncodedOut | Reference to repository-managed binary file | DeployR-encoded workspace data |
 | RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
 | ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
-| ExternalDataInRepoFileOut | DeployR-encoded application data | Reference to stored repository-managed file |
+| RepoFileInRepoFileOut | DeployR-encoded application data | Reference to stored repository-managed file |
 | MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
 
 Use the DeployR CLI to download and run the examples.
@@ -76,10 +76,10 @@ Use the DeployR CLI to download and run the examples.
 ### Authenticated Stateful Execution Data I/O Examples
 
 ```
-Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/*
+Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/exec/*
 ```
 
-These examples demonstrate the authenticated use of stateful projects that support the repeated execution of R code and R scripts.
+These examples demonstrate data I/O on executions of R code and R scripts by authenticated users on stateful projects.
 
 | Example Source File | Example Data Input | Example Data Output |
 | ------------------- | ------------------ | ------------------- |
@@ -87,7 +87,26 @@ These examples demonstrate the authenticated use of stateful projects that suppo
 | RepoFileInDataEncodedOut | Reference to repository-managed binary file | DeployR-encoded workspace data |
 | RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
 | ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
-| ExternalDataInRepoFileOut | DeployR-encoded application data | Reference to stored repository-managed file |
+| RepoFileInRepoFileOut | DeployR-encoded application data | Reference to stored repository-managed file |
+| MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
+
+Use the DeployR CLI to download and run the examples.
+
+### Authenticated Stateful Execution Data I/O Examples
+
+```
+Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/preload/*
+```
+
+These examples demonstrate data I/O on project initialization, prior to executions of R code and R scripts by authenticated users on stateful projects.
+
+| Example Source File | Example Data Input | Example Data Output |
+| ------------------- | ------------------ | ------------------- |
+| EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
+| RepoFileInDataEncodedOut | Reference to repository-managed binary file | DeployR-encoded workspace data |
+| RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
+| ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
+| RepoFileInRepoFileOut | DeployR-encoded application data | Reference to stored repository-managed file |
 | MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
 
 Use the DeployR CLI to download and run the examples.

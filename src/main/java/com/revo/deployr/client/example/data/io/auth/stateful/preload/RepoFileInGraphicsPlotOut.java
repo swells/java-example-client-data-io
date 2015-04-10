@@ -1,5 +1,5 @@
 /*
- * ExternalDataInDataFileOut.java
+ * RepoFileInGraphicsPlotOut.java
  *
  * Copyright (C) 2010-2015 by Revolution Analytics Inc.
  *
@@ -10,7 +10,7 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.auth.stateful;
+package com.revo.deployr.client.example.data.io.auth.stateful.preload;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
@@ -25,14 +25,9 @@ import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
-public class ExternalDataInDataFileOut {
+public class RepoFileInGraphicsPlotOut {
 
-    private static Logger log = Logger.getLogger(ExternalDataInDataFileOut.class);
-    /*
-     * Hipparcos star dataset URL endpoint.
-     */
-    private static String HIP_DAT_URL =
-        "http://astrostatistics.psu.edu/datasets/HIP_star.dat";
+    private static Logger log = Logger.getLogger(RepoFileInGraphicsPlotOut.class);
 
     public static void main(String args[]) throws Exception {
 
@@ -45,7 +40,7 @@ public class ExternalDataInDataFileOut {
              * Determine DeployR server endpoint.
              */
             String endpoint = System.getProperty("endpoint");
-            log.info("Using endpoint=" + endpoint);
+            log.info("[ CONFIGURATION  ] Using endpoint=" + endpoint);
 
             /*
              * Establish RClient connection to DeployR server.
@@ -55,9 +50,8 @@ public class ExternalDataInDataFileOut {
              */
             rClient = RClientFactory.createClient(endpoint);
 
-            log.info("Established anonymous " +
-                    "connection, rClient=" + rClient);
-
+            log.info("[   CONNECTION   ] Established anonymous " +
+                    "connection [ RClient ].");
 
             /*
              * Build a basic authentication token.
@@ -74,57 +68,41 @@ public class ExternalDataInDataFileOut {
              * of the authenticated user, rUser.
              */
             RUser rUser = rClient.login(rAuth);
-            log.info("Upgraded to authenticated " +
-                    "connection, rUser=" + rUser);
-            
-            /*
-             * Create a temporary project (R session).
-             *
-             * Optionally:
-             * ProjectCreationOptions options =
-             * new ProjectCreationOptions();
-             *
-             * Populate options as needed, then:
-             *
-             * rProject = rUser.createProject(options);
-             */
-            rProject = rUser.createProject();
-
-            log.info("Created stateful temporary " +
-                    "R session, rProject=" + rProject);
+            log.info("[ AUTHENTICATION ] Upgraded to authenticated " +
+                    "connection [ RUser ].");
 
             /*
-             * Create a ProjectExecutionOptions instance
-             * to specify data inputs and output to the
-             * execution of the repository-managed R script.
-             *
-             * This options object can be used to pass standard
-             * execution model parameters on execution calls. All
-             * fields are optional.
-             *
-             * See the Standard Execution Model chapter in the
-             * Client Library Tutorial on the DeployR website for
-             * further details.
+             * Create a ProjectCreationOptions instance
+             * to specify data inputs that "pre-heat" the R session
+             * workspace or working directory for your project.
              */
-            ProjectExecutionOptions options =
-                new ProjectExecutionOptions();
+            ProjectCreationOptions options =
+                new ProjectCreationOptions();
 
             /* 
-             * Load an R object literal "hipStarUrl" into the
-             * workspace prior to script execution.
-             *
-             * The R script checks for the existence of "hipStarUrl"
-             * in the workspace and if present uses the URL path
-             * to load the Hipparcos star dataset from the DAT file
-             * at that location.
+             * Preload from the DeployR repository the following
+             * data input file:
+             * /testuser/example-data-io/hipStar.dat
              */
-            RData hipStarUrl =
-                RDataFactory.createString("hipStarUrl", HIP_DAT_URL);
-            List<RData> rinputs = Arrays.asList(hipStarUrl);
-            options.rinputs = rinputs;
+            ProjectPreloadOptions preloadDirectory =
+                                new ProjectPreloadOptions();
+            preloadDirectory.filename = "hipStar.dat";
+            preloadDirectory.directory = "example-data-io";
+            preloadDirectory.author = "testuser";
+            options.preloadDirectory = preloadDirectory;
 
-            log.info("External data source input set on execution, " +
-                                                    hipStarUrl);
+            log.info("[ PRELOAD INPUT  ] Repository data file input " +
+                "set on project creation, [ ProjectCreationOptions.preloadDirectory ].");
+
+            /*
+             * Create a temporary project (R session) passing a 
+             * ProjectCreationOptions to "pre-heat" data into the
+             * workspace and/or working directory.
+             */
+            rProject = rUser.createProject(options);
+
+            log.info("[  GO STATEFUL   ] Created stateful temporary " +
+                    "R session [ RProject ].");
 
             /*
              * Execute a public analytics Web service as an authenticated
@@ -133,14 +111,14 @@ public class ExternalDataInDataFileOut {
              */
             RProjectExecution exec =
                     rProject.executeScript("dataIO.R",
-                            "example-data-io", "testuser", null, options);
+                            "example-data-io", "testuser", null, null);
 
-            log.info("R script execution completed, " +
-                                        "rScriptExecution=" + exec);
+            log.info("[   EXECUTION    ] Stateful R script " +
+                    "execution completed [ RProjectExecution ].");
 
             /*
-             * Retrieve the working directory file (artifact) called
-             * hip.csv that was generated by the execution.
+             * Retrieve R graphics device plot (result) called
+             * unnamedplot*.png that was generated by the execution.
              *
              * Outputs generated by an execution can be used in any
              * number of ways by client applications, including:
@@ -151,20 +129,17 @@ public class ExternalDataInDataFileOut {
              * 4. Pass output data along to another Web service.
              * 5. etc.
              */
-            List<RProjectFile> wdFiles = exec.about().artifacts;
+            List<RProjectResult> results = exec.about().results;
 
-            for(RProjectFile wdFile : wdFiles) {
-                if(wdFile.about().filename.equals("hip.csv")) {
-                    log.info("Retrieved working directory " +
-                        "data file output " + wdFile.about().filename +
-                        ", rProjectFile=" + wdFile);
-
-                    InputStream fis = null;
-                    try { fis = wdFile.download(); } catch(Exception ex) {
-                        log.warn("Working directory data file " + ex);
-                    } finally {
-                        IOUtils.closeQuietly(fis);
-                    }
+            for(RProjectResult result : results) {
+                log.info("[  DATA OUTPUT   ] Retrieved graphics device " +
+                    "plot output " + result.about().filename +
+                    " [ RProjectResult ].");
+                InputStream fis = null;
+                try { fis = result.download(); } catch(Exception ex) {
+                    log.warn("Graphics device plot download " + ex);
+                } finally {
+                    IOUtils.closeQuietly(fis);
                 }
             }
 

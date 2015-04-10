@@ -10,7 +10,7 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.auth.stateful;
+package com.revo.deployr.client.example.data.io.auth.stateful.preload;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
@@ -37,7 +37,7 @@ public class RepoFileInEncodedDataOut {
              * Determine DeployR server endpoint.
              */
             String endpoint = System.getProperty("endpoint");
-            log.info("Using endpoint=" + endpoint);
+            log.info("[ CONFIGURATION  ] Using endpoint=" + endpoint);
 
             /*
              * Establish RClient connection to DeployR server.
@@ -47,8 +47,8 @@ public class RepoFileInEncodedDataOut {
              */
             rClient = RClientFactory.createClient(endpoint);
 
-            log.info("Established anonymous " +
-                    "connection, rClient=" + rClient);
+            log.info("[   CONNECTION   ] Established anonymous " +
+                    "connection [ RClient ].");
 
             /*
              * Build a basic authentication token.
@@ -65,24 +65,41 @@ public class RepoFileInEncodedDataOut {
              * of the authenticated user, rUser.
              */
             RUser rUser = rClient.login(rAuth);
-            log.info("Upgraded to authenticated " +
-                    "connection, rUser=" + rUser);
+            log.info("[ AUTHENTICATION ] Upgraded to authenticated " +
+                    "connection [ RUser ].");
 
             /*
-             * Create a temporary project (R session).
-             *
-             * Optionally:
-             * ProjectCreationOptions options =
-             * new ProjectCreationOptions();
-             *
-             * Populate options as needed, then:
-             *
-             * rProject = rUser.createProject(options);
+             * Create a ProjectCreationOptions instance
+             * to specify data inputs that "pre-heat" the R session
+             * workspace or working directory for your project.
              */
-            rProject = rUser.createProject();
+            ProjectCreationOptions creationOpts =
+                new ProjectCreationOptions();
 
-            log.info("Created stateful temporary " +
-                    "R session, rProject=" + rProject);
+            /* 
+             * Preload from the DeployR repository the following
+             * binary R object input file:
+             * /testuser/example-data-io/hipStar.rData
+             */
+            ProjectPreloadOptions preloadWorkspace =
+                                new ProjectPreloadOptions();
+            preloadWorkspace.filename = "hipStar.rData";
+            preloadWorkspace.directory = "example-data-io";
+            preloadWorkspace.author = "testuser";
+            creationOpts.preloadWorkspace = preloadWorkspace;
+
+            log.info("[ PRELOAD INPUT  ] Repository binary file input " +
+                "set on project creation, [ ProjectCreationOptions.preloadWorkspace ].");
+
+            /*
+             * Create a temporary project (R session) passing a 
+             * ProjectCreationOptions to "pre-heat" data into the
+             * workspace and/or working directory.
+             */
+            rProject = rUser.createProject(creationOpts);
+
+            log.info("[  GO STATEFUL   ] Created stateful temporary " +
+                    "R session [ RProject ].");
 
             /*
              * Create a ProjectExecutionOptions instance
@@ -97,27 +114,8 @@ public class RepoFileInEncodedDataOut {
              * Client Library Tutorial on the DeployR website for
              * further details.
              */
-            ProjectExecutionOptions options =
+            ProjectExecutionOptions execOpts =
                 new ProjectExecutionOptions();
-
-            /* 
-             * Preload from the DeployR repository the following
-             * binary R object input file:
-             * /testuser/example-data-io/hipStar.rData
-             *
-             * As this is an anonymous operation "hipStar.rData"
-             * must have it's repository-managed access controls
-             * set to "public".
-             */
-            ProjectPreloadOptions preloadWorkspace =
-                                new ProjectPreloadOptions();
-            preloadWorkspace.filename = "hipStar.rData";
-            preloadWorkspace.directory = "example-data-io";
-            preloadWorkspace.author = "testuser";
-            options.preloadWorkspace = preloadWorkspace;
-
-            log.info("Binary file input set on execution, " +
-                                            preloadWorkspace);
 
             /*
              * Request the retrieval of the "hip" data.frame and
@@ -126,8 +124,11 @@ public class RepoFileInEncodedDataOut {
              * follows:
              * 'hip', hipDim', 'hipNames'.
              */
-            options.routputs =
+            execOpts.routputs =
                 Arrays.asList("hip", "hipDim", "hipNames");
+
+            log.info("[  EXEC OPTION   ] DeployR-encoded R object request " +
+                "set on execution [ ProjectExecutionOptions.routputs ].");
 
             /*
              * Execute a public analytics Web service as an authenticated
@@ -136,10 +137,10 @@ public class RepoFileInEncodedDataOut {
              */
             RProjectExecution exec =
                     rProject.executeScript("dataIO.R",
-                            "example-data-io", "testuser", null, options);
+                            "example-data-io", "testuser", null, execOpts);
 
-            log.info("Project script " +
-                    "execution completed, rProjectExecution=" + exec);
+            log.info("[   EXECUTION    ] Stateful R script " +
+                    "execution completed [ RProjectExecution ].");
 
             /*
              * Retrieve the requested R object data encodings from
@@ -152,30 +153,35 @@ public class RepoFileInEncodedDataOut {
             List<RData> objects = exec.about().workspaceObjects;
 
             for(RData rData : objects) {
-                log.info("Retrieved DeployR-encoded output " +
-                    rData.getName() + ", class=" + rData);
                 if(rData instanceof RDataFrame) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RDataFrame ].");
                     List<RData> hipSubsetVal =
                         ((RDataFrame) rData).getValue();
                 } else
                 if(rData instanceof RNumericVector) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RNumericVector ].");
                     List<Double> hipDimVal =
                         ((RNumericVector) rData).getValue();
-                    log.info("Retrieved DeployR-encoded output " +
-                        rData.getName() + ", value=" + hipDimVal);
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object " + rData.getName() +
+                        " value=" + hipDimVal);
                 } else
                 if(rData instanceof RStringVector) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RStringVector ].");
                     List<String> hipNamesVal =
                         ((RStringVector) rData).getValue();
-                    log.info("Retrieved DeployR-encoded output " +
-                        rData.getName() + ", value=" + hipNamesVal);
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object " + rData.getName() +
+                        " value=" + hipNamesVal);
                 } else {
-                    log.info("Unexpected DeployR-encoded data type returned, " +
+                    log.info("Unexpected DeployR-encoded R object returned, " +
                         "object name=" + rData.getName() + ", encoding=" +
                                                         rData.getClass());
                 }
             }
-
 
         } catch (Exception ex) {
             log.warn("Unexpected runtime exception=" + ex);

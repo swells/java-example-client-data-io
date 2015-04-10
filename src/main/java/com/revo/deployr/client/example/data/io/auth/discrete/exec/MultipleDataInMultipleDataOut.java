@@ -10,12 +10,14 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.anon.discrete;
+package com.revo.deployr.client.example.data.io.auth.discrete.exec;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
 import com.revo.deployr.client.factory.*;
 import com.revo.deployr.client.params.*;
+import com.revo.deployr.client.auth.RAuthentication;
+import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -43,7 +45,7 @@ public class MultipleDataInMultipleDataOut {
              * Determine DeployR server endpoint.
              */
             String endpoint = System.getProperty("endpoint");
-            log.info("Using endpoint=" + endpoint);
+            log.info("[ CONFIGURATION  ] Using endpoint=" + endpoint);
 
             /*
              * Establish RClient connection to DeployR server.
@@ -53,8 +55,26 @@ public class MultipleDataInMultipleDataOut {
              */
             rClient = RClientFactory.createClient(endpoint);
 
-            log.info("Established anonymous " +
-                    "connection, rClient=" + rClient);
+            log.info("[   CONNECTION   ] Established anonymous " +
+                    "connection [ RClient ].");
+
+            /*
+             * Build a basic authentication token.
+             */
+            RAuthentication rAuth =
+                    new RBasicAuthentication(System.getProperty("username"),
+                            System.getProperty("password"));
+
+            /*
+             * Establish an authenticated handle with the DeployR
+             * server, rUser. Following this call the rClient 
+             * connection is operating as an authenticated connection
+             * and all calls on rClient inherit the access permissions
+             * of the authenticated user, rUser.
+             */
+            RUser rUser = rClient.login(rAuth);
+            log.info("[ AUTHENTICATION ] Upgraded to authenticated " +
+                    "connection [ RUser ].");
 
             /*
              * Create the AnonymousProjectExecutionOptions object·
@@ -88,10 +108,6 @@ public class MultipleDataInMultipleDataOut {
              * Preload from the DeployR repository the following
              * binary R object input file:
              * /testuser/example-data-io/hipStar.rData
-             *
-             * As this is an anonymous operation "hipStar.rData"
-             * must have it's repository-managed access controls
-             * set to "public".
              */
             ProjectPreloadOptions preloadWorkspace =
                                 new ProjectPreloadOptions();
@@ -100,8 +116,8 @@ public class MultipleDataInMultipleDataOut {
             preloadWorkspace.author = "testuser";
             options.preloadWorkspace = preloadWorkspace;
 
-            log.info("Binary file input set on execution, " +
-                                            preloadWorkspace);
+            log.info("[   DATA INPUT   ] Repository binary file input " +
+                "set on execution, [ ProjectExecutionOptions.preloadWorkspace ].");
 
             /* 
              * Load an R object literal "hipStarUrl" into the
@@ -117,8 +133,8 @@ public class MultipleDataInMultipleDataOut {
             List<RData> rinputs = Arrays.asList(hipStarUrl);
             options.rinputs = rinputs;
 
-            log.info("External data source input set on execution, " +
-                                                    hipStarUrl);
+            log.info("[   DATA INPUT   ] External data source input " +
+                "set on execution, [ ProjectPreloadOptions.rinputs ].");
 
             /*
              * Request the retrieval of the "hip" data.frame and
@@ -130,8 +146,11 @@ public class MultipleDataInMultipleDataOut {
             options.routputs =
                 Arrays.asList("hip", "hipDim", "hipNames");
 
+            log.info("[  EXEC OPTION   ] DeployR-encoded R object request " +
+                "set on execution [ ProjectExecutionOptions.routputs ].");
+
             /*
-             * Execute a public analytics Web service as an anonymous
+             * Execute an analytics Web service as an authenticated
              * user based on a repository-managed R script:
              * /testuser/example-data-io/dataIO.R
              */
@@ -139,8 +158,8 @@ public class MultipleDataInMultipleDataOut {
                     rClient.executeScript("dataIO.R",
                             "example-data-io", "testuser", null, options);
 
-            log.info("R script execution completed, " +
-                                        "rScriptExecution=" + exec);
+            log.info("[   EXECUTION    ] Discrete R script " +
+                    "execution completed [ RScriptExecution ].");
 
             /*
              * Retrieve multiple outputs following the execution:
@@ -153,7 +172,8 @@ public class MultipleDataInMultipleDataOut {
              */
 
             String console = exec.about().console;
-            log.info("Retrieved R console output.");
+            log.info("[  DATA OUTPUT   ] Retrieved R console " +
+                "output [ String ].");
 
             /*
              * Retrieve the requested R object data encodings from
@@ -166,25 +186,31 @@ public class MultipleDataInMultipleDataOut {
             List<RData> objects = exec.about().workspaceObjects;
 
             for(RData rData : objects) {
-                log.info("Retrieved DeployR-encoded output " +
-                    rData.getName() + ", class=" + rData);
                 if(rData instanceof RDataFrame) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RDataFrame ].");
                     List<RData> hipSubsetVal =
                         ((RDataFrame) rData).getValue();
                 } else
                 if(rData instanceof RNumericVector) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RNumericVector ].");
                     List<Double> hipDimVal =
                         ((RNumericVector) rData).getValue();
-                    log.info("Retrieved DeployR-encoded output " +
-                        rData.getName() + ", value=" + hipDimVal);
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object " + rData.getName() +
+                        " value=" + hipDimVal);
                 } else
                 if(rData instanceof RStringVector) {
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object output " + rData.getName() + " [ RStringVector ].");
                     List<String> hipNamesVal =
                         ((RStringVector) rData).getValue();
-                    log.info("Retrieved DeployR-encoded output " +
-                        rData.getName() + ", value=" + hipNamesVal);
+                    log.info("[  DATA OUTPUT   ] Retrieved DeployR-encoded R " +
+                        "object " + rData.getName() +
+                        " value=" + hipNamesVal);
                 } else {
-                    log.info("Unexpected DeployR-encoded data type returned, " +
+                    log.info("Unexpected DeployR-encoded R object returned, " +
                         "object name=" + rData.getName() + ", encoding=" +
                                                         rData.getClass());
                 }
@@ -197,10 +223,9 @@ public class MultipleDataInMultipleDataOut {
             List<RProjectFile> wdFiles = exec.about().artifacts;
 
             for(RProjectFile wdFile : wdFiles) {
-                log.info("Retrieved working directory " +
-                    "binary file output " + wdFile.about().filename +
-                    ", rProjectFile=" + wdFile);
-
+                log.info("[  DATA OUTPUT   ] Retrieved working directory " +
+                    "file output " + wdFile.about().filename +
+                    " [ RProjectFile ].");
                 InputStream fis = null;
                 try { fis = wdFile.download(); } catch(Exception ex) {
                     log.warn("Working directory binary file " + ex);
@@ -216,10 +241,9 @@ public class MultipleDataInMultipleDataOut {
             List<RProjectResult> results = exec.about().results;
 
             for(RProjectResult result : results) {
-                log.info("Retrieved graphics device " +
+                log.info("[  DATA OUTPUT   ] Retrieved graphics device " +
                     "plot output " + result.about().filename +
-                    ", rProjectResult=" + result);
-
+                    " [ RProjectResult ].");
                 InputStream fis = null;
                 try { fis = result.download(); } catch(Exception ex) {
                     log.warn("Graphics device plot " + ex);

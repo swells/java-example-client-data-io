@@ -10,12 +10,14 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.anon.discrete;
+package com.revo.deployr.client.example.data.io.auth.discrete.exec;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
 import com.revo.deployr.client.factory.*;
 import com.revo.deployr.client.params.*;
+import com.revo.deployr.client.auth.RAuthentication;
+import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -40,7 +42,7 @@ public class EncodedDataInBinaryFileOut {
              * Determine DeployR server endpoint.
              */
             String endpoint = System.getProperty("endpoint");
-            log.info("Using endpoint=" + endpoint);
+            log.info("[ CONFIGURATION  ] Using endpoint=" + endpoint);
 
             /*
              * Establish RClient connection to DeployR server.
@@ -50,8 +52,27 @@ public class EncodedDataInBinaryFileOut {
              */
             rClient = RClientFactory.createClient(endpoint);
 
-            log.info("Established anonymous " +
-                    "connection, rClient=" + rClient);
+            log.info("[   CONNECTION   ] Established anonymous " +
+                    "connection [ RClient ].");
+
+
+            /*
+             * Build a basic authentication token.
+             */
+            RAuthentication rAuth =
+                    new RBasicAuthentication(System.getProperty("username"),
+                            System.getProperty("password"));
+
+            /*
+             * Establish an authenticated handle with the DeployR
+             * server, rUser. Following this call the rClient 
+             * connection is operating as an authenticated connection
+             * and all calls on rClient inherit the access permissions
+             * of the authenticated user, rUser.
+             */
+            RUser rUser = rClient.login(rAuth);
+            log.info("[ AUTHENTICATION ] Upgraded to authenticated " +
+                    "connection [ RUser ].");
 
             /*
              * Create the AnonymousProjectExecutionOptions object·
@@ -82,11 +103,11 @@ public class EncodedDataInBinaryFileOut {
                 options.rinputs = rinputs;
             }
 
-            log.info("DeployR-encoded data.frame input set on execution, " +
-                                                    generatedData);
+            log.info("[   DATA INPUT   ] DeployR-encoded R input " +
+                "set on execution, [ ProjectExecutionOptions.rinputs ].");
 
             /*
-             * Execute a public analytics Web service as an anonymous
+             * Execute an analytics Web service as an authenticated
              * user based on a repository-managed R script:
              * /testuser/example-data-io/dataIO.R
              */
@@ -94,8 +115,8 @@ public class EncodedDataInBinaryFileOut {
                     rClient.executeScript("dataIO.R",
                             "example-data-io", "testuser", null, options);
 
-            log.info("R script execution completed, " +
-                                        "rScriptExecution=" + exec);
+            log.info("[   EXECUTION    ] Discrete R script " +
+                    "execution completed [ RScriptExecution ].");
 
             /*
              * Retrieve the working directory file (artifact) called
@@ -114,10 +135,9 @@ public class EncodedDataInBinaryFileOut {
 
             for(RProjectFile wdFile : wdFiles) {
                 if(wdFile.about().filename.equals("hip.rData")) {
-                    log.info("Retrieved working directory " +
-                        "binary file output " + wdFile.about().filename +
-                        ", rProjectFile=" + wdFile);
-
+                    log.info("[  DATA OUTPUT   ] Retrieved working directory " +
+                        "file output " + wdFile.about().filename +
+                        " [ RProjectFile ].");
                     InputStream fis = null;
                     try { fis = wdFile.download(); } catch(Exception ex) {
                         log.warn("Working directory binary file " + ex);

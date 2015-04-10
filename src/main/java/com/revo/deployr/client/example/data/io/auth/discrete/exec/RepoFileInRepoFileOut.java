@@ -1,5 +1,5 @@
 /*
- * RepoFileInEncodedDataOut.java
+ * RepoFileInRepoFileOut.java
  *
  * Copyright (C) 2010-2015 by Revolution Analytics Inc.
  *
@@ -10,7 +10,7 @@
  * Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0) for more details.
  *
  */
-package com.revo.deployr.client.example.data.io.auth.discrete;
+package com.revo.deployr.client.example.data.io.auth.discrete.exec;
 
 import com.revo.deployr.client.*;
 import com.revo.deployr.client.data.*;
@@ -19,12 +19,15 @@ import com.revo.deployr.client.params.*;
 import com.revo.deployr.client.auth.RAuthentication;
 import com.revo.deployr.client.auth.basic.RBasicAuthentication;
 import java.util.*;
+import java.io.*;
+import java.net.*;
+import org.apache.commons.io.IOUtils;
 
 import org.apache.log4j.Logger;
 
-public class RepoFileInEncodedDataOut {
+public class RepoFileInRepoFileOut {
 
-    private static Logger log = Logger.getLogger(RepoFileInEncodedDataOut.class);
+    private static Logger log = Logger.getLogger(RepoFileInRepoFileOut.class);
 
     public static void main(String args[]) throws Exception {
 
@@ -36,7 +39,7 @@ public class RepoFileInEncodedDataOut {
              * Determine DeployR server endpoint.
              */
             String endpoint = System.getProperty("endpoint");
-            log.info("Using endpoint=" + endpoint);
+            log.info("[ CONFIGURATION  ] Using endpoint=" + endpoint);
 
             /*
              * Establish RClient connection to DeployR server.
@@ -46,8 +49,8 @@ public class RepoFileInEncodedDataOut {
              */
             rClient = RClientFactory.createClient(endpoint);
 
-            log.info("Established anonymous " +
-                    "connection, rClient=" + rClient);
+            log.info("[   CONNECTION   ] Established anonymous " +
+                    "connection [ RClient ].");
 
             /*
              * Build a basic authentication token.
@@ -64,8 +67,8 @@ public class RepoFileInEncodedDataOut {
              * of the authenticated user, rUser.
              */
             RUser rUser = rClient.login(rAuth);
-            log.info("Upgraded to authenticated " +
-                    "connection, rUser=" + rUser);
+            log.info("[ AUTHENTICATION ] Upgraded to authenticated " +
+                    "connection [ RUser ].");
 
             /*
              * Create the AnonymousProjectExecutionOptions object·
@@ -84,35 +87,40 @@ public class RepoFileInEncodedDataOut {
 
             /* 
              * Preload from the DeployR repository the following
-             * binary R object input file:
-             * /testuser/example-data-io/hipStar.rData
-             *
-             * As this is an anonymous operation "hipStar.rData"
-             * must have it's repository-managed access controls
-             * set to "public".
+             * data input file:
+             * /testuser/example-data-io/hipStar.dat
              */
-            ProjectPreloadOptions preloadWorkspace =
+            ProjectPreloadOptions preloadDirectory =
                                 new ProjectPreloadOptions();
-            preloadWorkspace.filename = "hipStar.rData";
-            preloadWorkspace.directory = "example-data-io";
-            preloadWorkspace.author = "testuser";
-            options.preloadWorkspace = preloadWorkspace;
+            preloadDirectory.filename = "hipStar.dat";
+            preloadDirectory.directory = "example-data-io";
+            preloadDirectory.author = "testuser";
+            options.preloadDirectory = preloadDirectory;
 
-            log.info("Binary file input set on execution, " +
-                                            preloadWorkspace);
+            log.info("[   DATA INPUT   ] Repository data file input " +
+                "set on execution, [ ProjectExecutionOptions.preloadDirectory ].");
 
-            /*
-             * Request the retrieval of the "hip" data.frame and
-             * two vector objects from the workspace following the
-             * execution. The corresponding R objects are named as
-             * follows:
-             * 'hip', hipDim', 'hipNames'.
+            /* 
+             * Request storage of entire workspace as a
+             * binary rData file to the DeployR-repository
+             * following the execution.
+             *
+             * Alternatively, you could use storageOptions.objects
+             * to store individual objects from the workspace.
              */
-            options.routputs =
-                Arrays.asList("hip", "hipDim", "hipNames");
+            ProjectStorageOptions storageOptions =
+                                new ProjectStorageOptions();
+            // Use random file name for this example.
+            storageOptions.workspace =
+                Long.toHexString(Double.doubleToLongBits(Math.random()));
+            storageOptions.directory = "example-data-io";
+            options.storageOptions = storageOptions;
+
+            log.info("[  EXEC OPTION   ] Repository storage request " +
+                "set on execution [ ProjectExecutionOptions.storageOptions ].");
 
             /*
-             * Execute a public analytics Web service as an anonymous
+             * Execute an analytics Web service as an authenticated
              * user based on a repository-managed R script:
              * /testuser/example-data-io/dataIO.R
              */
@@ -120,44 +128,40 @@ public class RepoFileInEncodedDataOut {
                     rClient.executeScript("dataIO.R",
                             "example-data-io", "testuser", null, options);
 
-            log.info("R script execution completed, " +
-                                        "rScriptExecution=" + exec);
+            log.info("[   EXECUTION    ] Discrete R script " +
+                    "execution completed [ RScriptExecution ].");
 
             /*
-             * Retrieve the requested R object data encodings from
-             * the results of the script execution. 
+             * Retrieve repository-managed file(s) that were 
+             * generated by the execution per ProjectStorageOptions.
              *
-             * See the R Object Data Decoding chapter in the
-             * Client Library Tutorial on the DeployR website for
-             * further details.
+             * Outputs generated by an execution can be used in any
+             * number of ways by client applications, including:
+             *
+             * 1. Use output data to perform further calculations.
+             * 2. Display output data to an end-user.
+             * 3. Write output data to a database.
+             * 4. Pass output data along to another Web service.
+             * 5. etc.
              */
-            List<RData> objects = exec.about().workspaceObjects;
+            List<RRepositoryFile> repoFiles = exec.about().repositoryFiles;
 
-            for(RData rData : objects) {
-                log.info("Retrieved DeployR-encoded output " +
-                    rData.getName() + ", class=" + rData);
-                if(rData instanceof RDataFrame) {
-                    List<RData> hipSubsetVal =
-                        ((RDataFrame) rData).getValue();
-                } else
-                if(rData instanceof RNumericVector) {
-                    List<Double> hipDimVal =
-                        ((RNumericVector) rData).getValue();
-                    log.info("Retrieved DeployR-encoded output " +
-                        rData.getName() + ", value=" + hipDimVal);
-                } else
-                if(rData instanceof RStringVector) {
-                    List<String> hipNamesVal =
-                        ((RStringVector) rData).getValue();
-                    log.info("Retrieved DeployR-encoded output " +
-                        rData.getName() + ", value=" + hipNamesVal);
-                } else {
-                    log.info("Unexpected DeployR-encoded data type returned, " +
-                        "object name=" + rData.getName() + ", encoding=" +
-                                                        rData.getClass());
+            for(RRepositoryFile repoFile : repoFiles) {
+                log.info("[  DATA OUTPUT   ] Retrieved repository " +
+                    "file output " + repoFile.about().filename +
+                    " [ RRepositoryFile ].");
+                InputStream fis = null;
+                try { fis = repoFile.download(); } catch(Exception ex) {
+                    log.warn("Repository-managed file download " + ex);
+                } finally {
+                    IOUtils.closeQuietly(fis);
+                    try { // Clean-up after example.
+                        repoFile.delete();
+                    } catch(Exception dex) {
+                        log.warn("Repository-managed file delete " + dex);
+                    }
                 }
             }
-
 
         } catch (Exception ex) {
             log.warn("Unexpected runtime exception=" + ex);

@@ -1,5 +1,5 @@
-Tutorial: Anonymous Discrete Execution Data I/O
-===============================================
+Anonymous Discrete Execution Data I/O
+=====================================
 
 ```
 Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec/*.java

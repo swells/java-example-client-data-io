@@ -1,5 +1,5 @@
-Tutorial: Authenticated Discrete Execution Data I/O
-===================================================
+Authenticated Discrete Execution Data I/O
+=========================================
 
 ```
 Source: src/main/java/com/revo/deployr/client/example/data/io/auth/discrete/exec/*

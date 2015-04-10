@@ -1,5 +1,5 @@
-Tutorial: Authenticated Stateful Preload & Execution Data I/O
-=============================================================
+Authenticated Stateful Preload & Execution Data I/O
+===================================================
 
 ```
 Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/preload/*

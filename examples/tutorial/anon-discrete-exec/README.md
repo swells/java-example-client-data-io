@@ -24,7 +24,7 @@ Use the DeployR CLI to download and run the examples.
 
 ## Tutorial: Example-by-Example
 
-The name of each example indicates the data input and data output types respectively in the following format:
+The name of each example applicatoin indicates the data input and data output types respectively in the following format:
 
 [`Data Input Type`]In[`Data Output Type`]Out
 

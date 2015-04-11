@@ -26,7 +26,7 @@ Use the DeployR CLI to download and run the examples.
 
 The name of each example indicates the data input and data output types respectively in the following format:
 
-[ Data Input Type]In[ Data Output Type]Out
+[`Data Input Type`]In[`Data Output Type`]Out
 
 For example, the `EncodedDataInBinaryFileOut` example indicates that DeployR-encoded R object data (`EncodedDataIn`) will be sent as a data input while a binary file from the R session working directory (`BinaryFileOut`) will be returned as a data output.
 

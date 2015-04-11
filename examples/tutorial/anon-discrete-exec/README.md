@@ -30,7 +30,7 @@ The name of each example application indicates the data input and data output ty
 
 For example, the `EncodedDataInBinaryFileOut` example indicates that DeployR-encoded R object data (`EncodedDataIn`) will be sent as a data input while a binary file from the R session working directory (`BinaryFileOut`) will be returned as a data output.
 
-The set of data input and output types used in these naming conventions are explained further here:
+The set of data input and output types used in these naming conventions are described here:
 
 - `EncodedDataIn` represents DeployR-encoded R object data sent as a data input.
 - `RepoFileIn` represents a reference to a repository-managed file sent as a data input.

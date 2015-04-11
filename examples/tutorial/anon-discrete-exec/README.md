@@ -1,6 +1,6 @@
 ## Tutorial: Anonymous Discrete Execution Data I/O
 
-These examples demonstrate data I/O on discrete executions of R scripts by [anonymous users](http://deployr.revolutionanalytics.com/documents/dev/api-doc/guide/introduction.html#introusers) on [stateless projects](http://deployr.revolutionanalytics.com/documents/dev/api-doc/guide/introduction.html#anonymousprojects).
+The following examples demonstrate data I/O on discrete executions of R scripts by [anonymous users](http://deployr.revolutionanalytics.com/documents/dev/api-doc/guide/introduction.html#introusers) on [stateless projects](http://deployr.revolutionanalytics.com/documents/dev/api-doc/guide/introduction.html#anonymousprojects).
 
 ```
 Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec/*.java

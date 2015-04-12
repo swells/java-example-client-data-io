@@ -54,6 +54,13 @@ The following table describes the application workflow (steps) along with the lo
 
 | Step          | Log Output                                   |
 | --------------| ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+| AUTHENTICATION | Upgraded to authenticated connection [ RUser ] |
+| PRELOAD INPUT  | DeployR-encoded R input set on project creation, [ ProjectCreationOptions.rinputs ] |
+|  GO STATEFUL   | Created stateful temporary R session [ RProject ] |
+|   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
+|  DATA OUTPUT   | Retrieved working directory file output hip.rData [ RProjectFile ] |
 
 
 ### 2. ExternalDataInDataFileOut
@@ -66,6 +73,13 @@ The following table describes the application workflow (steps) along with the lo
 
 | Step           | Log Output                                   |
 | -------------- | ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+| AUTHENTICATION | Upgraded to authenticated connection [ RUser ] |
+| PRELOAD INPUT  | External data source input set on project creation, [ ProjectCreationOptions.rinputs ] |
+|  GO STATEFUL   | Created stateful temporary R session [ RProject ] |
+|   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
+|  DATA OUTPUT   | Retrieved working directory file output hip.csv [ RProjectFile ] |
 
 ### 3. RepoFileInEncodedDataOut
 
@@ -77,6 +91,18 @@ The following table describes the application workflow (steps) along with the lo
 
 | Step           | Log Output                                   |
 | -------------- | ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+| AUTHENTICATION | Upgraded to authenticated connection [ RUser ] |
+| PRELOAD INPUT  | Repository binary file input set on project creation, [ ProjectCreationOptions.preloadWorkspace ] |
+|  GO STATEFUL   | Created stateful temporary R session [ RProject ] |
+|  EXEC OPTION   | DeployR-encoded R object request set on execution [ ProjectExecutionOptions.routputs ] |
+|   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hip [ RDataFrame ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hipDim [ RNumericVector ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object hipDim value=[2719.0, 9.0] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hipNames [ RStringVector ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object hipNames value=[HIP, Vmag, RA, DE, Plx, pmRA, pmDE, e_Plx, B.V] |
 
 ### 4. RepoFileInGraphicsPlotOut
 
@@ -88,6 +114,13 @@ The following table describes the application workflow (steps) along with the lo
 
 | Step           | Log Output                                   |
 | -------------- | ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+| AUTHENTICATION | Upgraded to authenticated connection [ RUser ] |
+| PRELOAD INPUT  | Repository data file input set on project creation, [ ProjectCreationOptions.preloadDirectory ] |
+|  GO STATEFUL   | Created stateful temporary R session [ RProject ] |
+|   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
+|  DATA OUTPUT   | Retrieved graphics device plot output unnamedplot001.png [ RProjectResult ] |
 
 ### 5. RepoFileInRepoFileOut
 
@@ -99,6 +132,14 @@ The following table describes the application workflow (steps) along with the lo
 
 | Step           | Log Output                                   |
 | -------------- | ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+| AUTHENTICATION | Upgraded to authenticated connection [ RUser ] |
+| PRELOAD INPUT  | Repository binary file input set on project creation, [ ProjectCreationOptions.preloadWorkspace ] |
+|  GO STATEFUL   | Created stateful temporary R session [ RProject ] |
+|  EXEC OPTION   | Repository storage request set on execution [ ProjectExecutionOptions.storageOptions ] |
+|   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
+|  DATA OUTPUT   | Retrieved repository file output 3fd8c96f0e8b4696.rData [ RRepositoryFile ] |
 
 
 ### 6. MultipleDataInMultipleDataOut
@@ -111,6 +152,23 @@ The following table describes the application workflow (steps) along with the lo
 
 | Step           | Log Output                                   |
 | -------------- | ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+| AUTHENTICATION | Upgraded to authenticated connection [ RUser ] |
+| PRELOAD INPUT  | Repository binary file input set on project creation, [ ProjectCreationOptions.preloadWorkspace ] |
+| PRELOAD INPUT  | External data source input set on project creation, [ ProjectCreationOptions.rinputs ] |
+|  GO STATEFUL   | Created stateful temporary R session [ RProject ] |
+|  EXEC OPTION   | DeployR-encoded R object request set on execution [ ProjectExecutionOptions.routputs ] |
+|   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
+|  DATA OUTPUT   | Retrieved R console output [ String ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hip [ RDataFrame ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hipDim [ RNumericVector ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object hipDim value=[2719.0, 9.0] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hipNames [ RStringVector ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object hipNames value=[HIP, Vmag, RA, DE, Plx, pmRA, pmDE, e_Plx, B.V] |
+|  DATA OUTPUT   | Retrieved working directory file output hip.csv [ RProjectFile ] |
+|  DATA OUTPUT   | Retrieved working directory file output hip.rData [ RProjectFile ] |
+|  DATA OUTPUT   | Retrieved graphics device plot output unnamedplot001.png [ RProjectResult ] |
 
 
 ## License ##

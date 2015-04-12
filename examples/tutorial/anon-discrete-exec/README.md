@@ -11,7 +11,7 @@ Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec
 | Example Application | Example Data Input | Example Data Output |
 | ------------------- | ------------------ | ------------------- |
 | EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
-| RepoFileInEncodedDataOut | Reference to repository-managed binary file | DeployR-encoded workspace data |
+| RepoFileInEncodedDataOut | Reference to repository-managed binary file | DeployR-encoded R object data |
 | RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
 | ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
 | MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |

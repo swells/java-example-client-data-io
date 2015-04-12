@@ -77,7 +77,7 @@ The following table describes the application workflow (steps) along with the lo
 ### 3. RepoFileInEncodedDataOut
 
 ```
-Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInDataEncodedOut.java
+Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInEncodedDataOut.java
 ```
 
 The following table describes the application workflow (steps) along with the log output generated at each step:

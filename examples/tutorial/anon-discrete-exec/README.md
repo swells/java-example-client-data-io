@@ -16,7 +16,7 @@ Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec
 | ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
 | MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
 
-The name of each example application indicates the data input and data output types used by the application by using the following naming convention:
+The name of each example application indicates the data input and data output types used by the application. The following naming convention applies:
 
 [`Data Input Type`]In[`Data Output Type`]Out
 

@@ -11,9 +11,9 @@ Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec
 | Example Application | Example Data Input | Example Data Output |
 | ------------------- | ------------------ | ------------------- |
 | EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
+| ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
 | RepoFileInEncodedDataOut | Reference to repository-managed binary file | DeployR-encoded R object data |
 | RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
-| ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
 | MultipleDataInMultipleDataOut | Multilple data inputs | Multiple data outputs |
 
 The name of each example application indicates the data input and data output types used by the application. The following naming convention applies:
@@ -58,41 +58,7 @@ The following table describes the application workflow (steps) along with the lo
 | EXECUTION     | Discrete R script execution completed [ RScriptExecution ] |
 | DATA OUTPUT   | Retrieved working directory file output hip.rData [ RProjectFile ] |
 
-
-### 2. RepoFileInEncodedDataOut
-
-```
-Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInDataEncodedOut.java
-```
-
-The following table describes the application workflow (steps) along with the log output generated at each step:
-
-| Step           | Log Output                                   |
-| -------------- | ---------------------------------------------|
-| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
-|   CONNECTION   | Established anonymous connection [ RClient ] |
-|   DATA INPUT   | DeployR-encoded R input set on execution, [ ProjectExecutionOptions.rinputs ] |
-|   EXECUTION    | Discrete R script execution completed [ RScriptExecution ] |
-|  DATA OUTPUT   | Retrieved working directory file output hip.rData [ RProjectFile ] |
-
-### 3. RepoFileInGraphicsPlotOut
-
-```
-Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInGraphicsPlotOut.java
-```
-
-The following table describes the application workflow (steps) along with the log output generated at each step:
-
-| Step           | Log Output                                   |
-| -------------- | ---------------------------------------------|
-| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
-|   CONNECTION   | Established anonymous connection [ RClient ] |
-|   DATA INPUT   | Repository data file input set on execution, [ ProjectExecutionOptions.preloadDirectory ] |
-|   EXECUTION    | Discrete R script execution completed [ RScriptExecution ] |
-|  DATA OUTPUT   | Retrieved graphics device plot output unnamedplot001.png [ RProjectResult ] |
-
-
-### 4. ExternalDataInDataFileOut
+### 2. ExternalDataInDataFileOut
 
 ```
 Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/ExternalDataInDataFileOut.java
@@ -108,6 +74,37 @@ The following table describes the application workflow (steps) along with the lo
 |   EXECUTION    | Discrete R script execution completed [ RScriptExecution ] |
 |  DATA OUTPUT   | Retrieved working directory file output hip.csv [ RProjectFile ] |
 
+### 3. RepoFileInEncodedDataOut
+
+```
+Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInDataEncodedOut.java
+```
+
+The following table describes the application workflow (steps) along with the log output generated at each step:
+
+| Step           | Log Output                                   |
+| -------------- | ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+|   DATA INPUT   | DeployR-encoded R input set on execution, [ ProjectExecutionOptions.rinputs ] |
+|   EXECUTION    | Discrete R script execution completed [ RScriptExecution ] |
+|  DATA OUTPUT   | Retrieved working directory file output hip.rData [ RProjectFile ] |
+
+### 4. RepoFileInGraphicsPlotOut
+
+```
+Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInGraphicsPlotOut.java
+```
+
+The following table describes the application workflow (steps) along with the log output generated at each step:
+
+| Step           | Log Output                                   |
+| -------------- | ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+|   DATA INPUT   | Repository data file input set on execution, [ ProjectExecutionOptions.preloadDirectory ] |
+|   EXECUTION    | Discrete R script execution completed [ RScriptExecution ] |
+|  DATA OUTPUT   | Retrieved graphics device plot output unnamedplot001.png [ RProjectResult ] |
 
 ### 5. MultipleDataInMultipleDataOut
 

@@ -8,7 +8,7 @@ Source: src/main/java/com/revo/deployr/client/example/data/io/anon/discrete/exec
 
 ## Tutorial: Summary
 
-| Example Source File | Example Data Input | Example Data Output |
+| Example Application | Example Data Input | Example Data Output |
 | ------------------- | ------------------ | ------------------- |
 | EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
 | RepoFileInEncodedDataOut | Reference to repository-managed binary file | DeployR-encoded workspace data |

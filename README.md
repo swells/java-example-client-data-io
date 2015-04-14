@@ -3,9 +3,9 @@ java-example-client-data-io
 
 The following examples demonstrate how different types of data inputs and outputs can be sent to and retrieved from [DeployR-managed](http://deployr.revolutionanalytics.com) R sessions when executing R code or R scripts using the [DeployR client library](http://deployr.revolutionanalytics.com/dev).
 
-- [Tutorial: Authenticated Users & Data I/O](#tutorial-authenticated-users--data-io-authtutorial)
-- [Tutorial: Anonymous Users & Data I/O](anontutorial)
-- [Tutorial: All Users Big Data I/O](bigtutorial)
+- [Tutorial: Authenticated Users & Data I/O](#tutorial-authenticated-users--data-io)
+- [Tutorial: Anonymous Users & Data I/O](#tutorial-anonymous-users--data-io)
+- [Tutorial: All Users Big Data I/O](#tutorial-all-users-big-data-io)
 
 ### About: DeployR Inputs
 

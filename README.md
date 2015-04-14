@@ -6,7 +6,6 @@ The following tutorials demonstrate how different types of data inputs and outpu
 - [About: DeployR Inputs](#about-deployr-inputs)
 - [About: DeployR Outputs](#about-deployr-outputs)
 - [Tutorial: Authenticated Users & Data I/O](#tutorial-authenticated-users--data-io)
-- [Tutorial: Authenticated Users & Data I/O](#tutorial-authenticated-users--data-io)
 - [Tutorial: Anonymous Users & Data I/O](#tutorial-anonymous-users--data-io)
 - [Tutorial: All Users Big Data I/O](#tutorial-all-users-big-data-io)
 - [Tutorial: R Analytics Example Dependencies](#r-analytics-example-dependencies)

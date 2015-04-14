@@ -4,7 +4,7 @@ java-example-client-data-io
 The following examples demonstrate how different types of data inputs and outputs can be sent to and retrieved from [DeployR-managed](http://deployr.revolutionanalytics.com) R sessions when executing R code or R scripts using the [DeployR client library](http://deployr.revolutionanalytics.com/dev).
 
 - [Tutorial: Authenticated Users & Data I/O](authtutorial)
-- [Tutorial: Anonymous Users & Data I/O)(anontutorial)
+- [Tutorial: Anonymous Users & Data I/O](anontutorial)
 - [Tutorial: All Users Big Data I/O](bigtutorial)
 
 ### About: DeployR Inputs
@@ -37,7 +37,7 @@ DeployR supports the following types of data outputs:
 5. References to repository-managed data or binary files that were stored following the execution of R code or an R script. These repository-managed files can be downloaded from DeployR on request.
 
 
-## Tutorial: Authenticated Users & Data I/O [authtutorial]
+## Tutorial: Authenticated Users & Data I/O [authtutorial] ##
 
 Authenticated (trusted) users can execute both R code and repository-managed R scripts that they themselves have created or R scripts that have been shared by other authenticated (trusted) users.
 
@@ -49,7 +49,7 @@ The following tutorials demonstrate the data I/O options available to authentica
 - [Stateful Execution Data I/O](examples/tutorial/auth-stateful-exec)
 - [Stateful Preload & Execution Data I/O](examples/tutorial/auth-stateful-preload)
 
-## Tutorial: Anonymous Users & Data I/O [anontutorial]
+## Tutorial: Anonymous Users & Data I/O [anontutorial] ##
 
 Anonymous (untrusted) users can only execute repository-managed R scripts that have been assigned _public_ access privileges by authenticated (trusted) users.
 
@@ -59,7 +59,7 @@ The following tutorial demonstrate the data I/O options available to anonymous u
 
 - [Discrete Execution Data I/O](examples/tutorial/anon-discrete-exec)
 
-## Tutorial: All Users Big Data I/O [bigtutorial]
+## Tutorial: All Users Big Data I/O [bigtutorial] ##
 
 The set of data I/O tutorials detailed above for authenticated and anonymous users cover most use cases for moving data into and out of the DeployR server. However, there are times when you may want to work with data that is simply too large to move between your client application and the DeployR server. This is particularly true when you are working with genuinely `Big Data` files.
 

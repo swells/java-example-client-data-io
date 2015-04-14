@@ -7,7 +7,7 @@ The following examples demonstrate how different types of data inputs and output
 
 DeployR supports the following types of data inputs:
 
-1. [DeployR-encoded](http://deployr.revolutionanalytics.com/dev/encoding) application generated data, including data read from databases, data input by end-users, or data otherwise derived by your application logic. These data can be sent as inputs and automatically decoded into the workspace of an R session when executing R code or an R script.
+1. [DeployR-encoded](http://deployr.revolutionanalytics.com/documents/dev/clientlib/#encoding) application generated data, including data read from databases, data input by end-users, or data otherwise derived by your application logic. These data can be sent as inputs and automatically decoded into the workspace of an R session when executing R code or an R script.
 
 2. References to external data sources, including URLs, external Web service endpoints or database connection endpoints along with associated credentials and/or record identifiers. These data can be sent as DeployR-encoded inputs and automatically decoded into the workspace and then used to load data directly into an R session when executing R code or an R script.
 

@@ -11,6 +11,7 @@ Source: src/main/java/com/revo/deployr/client/example/data/io/auth/stateful/exec
 | Example Application | Example Data Input | Example Data Output |
 | ------------------- | ------------------ | ------------------- |
 | EncodedDataInBinaryFileOut | DeployR-encoded application data | Working directory binary file |
+| LocalDataInDataFileOut | Local disk file data | DeployR-encoded R object data |
 | ExternalDataInDataFileOut | Reference to external data source | Working directory data file |
 | RepoFileInEncodedDataOut | Reference to repository-managed binary file | DeployR-encoded R object data |
 | RepoFileInGraphicsPlotOut | Reference to repository-managed data file | Graphics device generated plot | 
@@ -26,6 +27,7 @@ For example, the `EncodedDataInBinaryFileOut` example indicates that DeployR-enc
 The set of data input and output types currently demonstrated by these examples are described as follows:
 
 - `EncodedDataIn` represents DeployR-encoded application data sent as a data input.
+- `LocalDataIn` represents local disk file data uploaded as a data input.
 - `RepoFileIn` represents a reference to a repository-managed file sent as a data input.
 - `ExternalDataIn` represents DeployR-encoded references to external data sources sent as an input.
 - `MultipleDataIn` represents multiple data inputs.
@@ -62,7 +64,31 @@ The following table describes the application workflow (steps) along with the lo
 |  DATA OUTPUT   | Retrieved working directory file output hip.rData [ RProjectFile ] |
 
 
-### 2. ExternalDataInDataFileOut
+### 2. LocalDataInEncodedDataOut
+
+```
+Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/LocalDataInEncodedDataOut.java
+```
+
+The following table describes the application workflow (steps) along with the log output generated at each step:
+
+| Step          | Log Output                                   |
+| --------------| ---------------------------------------------|
+| CONFIGURATION  | Using endpoint=http://localhost:7400/deployr |
+|   CONNECTION   | Established anonymous connection [ RClient ] |
+| AUTHENTICATION | Upgraded to authenticated connection [ RUser ] |
+|  GO STATEFUL   | Created stateful temporary R session [ RProject ] |
+|  DATA UPLOAD   | Uploaded data file input to working directory, [ RProjectFile ] |
+|  EXEC OPTION   | DeployR-encoded R object request set on execution [ ProjectExecutionOptions.routputs ] |
+|   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hip [ RDataFrame ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hipDim [ RNumericVector ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object hipDim value=[2719.0, 9.0] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object output hipNames [ RStringVector ] |
+|  DATA OUTPUT   | Retrieved DeployR-encoded R object hipNames value=[HIP, Vmag, RA, DE, Plx, pmRA, pmDE, e_Plx, B.V] |
+
+
+### 3. ExternalDataInDataFileOut
 
 ```
 Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/ExternalDataInDataFileOut.java
@@ -80,7 +106,7 @@ The following table describes the application workflow (steps) along with the lo
 |   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
 |  DATA OUTPUT   | Retrieved working directory file output hip.csv [ RProjectFile ] |
 
-### 3. RepoFileInEncodedDataOut
+### 4. RepoFileInEncodedDataOut
 
 ```
 Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInEncodedDataOut.java
@@ -103,7 +129,7 @@ The following table describes the application workflow (steps) along with the lo
 |  DATA OUTPUT   | Retrieved DeployR-encoded R object output hipNames [ RStringVector ] |
 |  DATA OUTPUT   | Retrieved DeployR-encoded R object hipNames value=[HIP, Vmag, RA, DE, Plx, pmRA, pmDE, e_Plx, B.V] |
 
-### 4. RepoFileInGraphicsPlotOut
+### 5. RepoFileInGraphicsPlotOut
 
 ```
 Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInGraphicsPlotOut.java
@@ -121,7 +147,7 @@ The following table describes the application workflow (steps) along with the lo
 |   EXECUTION    | Stateful R script execution completed [ RProjectExecution ] |
 |  DATA OUTPUT   | Retrieved graphics device plot output unnamedplot001.png [ RProjectResult ] |
 
-### 5. RepoFileInRepoFileOut
+### 6. RepoFileInRepoFileOut
 
 ```
 Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/RepoFileInRepoFileOut.java
@@ -141,7 +167,7 @@ The following table describes the application workflow (steps) along with the lo
 |  DATA OUTPUT   | Retrieved repository file output 3fc6c22d2a68f270.rData [ RRepositoryFile ] |
 
 
-### 6. MultipleDataInMultipleDataOut
+### 7. MultipleDataInMultipleDataOut
 
 ```
 Example: com/revo/deployr/client/example/data/io/anon/discrete/exec/MultipleDataInMultipleDataOut.java

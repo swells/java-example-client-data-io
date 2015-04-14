@@ -55,11 +55,11 @@ The following tutorial demonstrate the data I/O options available to anonymous u
 
 - [Discrete Execution Data I/O](examples/tutorial/anon-discrete-exec)
 
-## Tutorial: Working With Big Data Files
+## Tutorial: Big Data I/O
 
-The set of data I/O tutorials detailed above for authenticated and anonymous users cover most use cases for moving data into and out of the DeployR server. However, there are times when you may want to work with data that is simply too large to move between your client application and the DeployR server. This is particularly true when you are working with genuinely `big data` files.
+The set of data I/O tutorials detailed above for authenticated and anonymous users cover most use cases for moving data into and out of the DeployR server. However, there are times when you may want to work with data that is simply too large to move between your client application and the DeployR server. This is particularly true when you are working with genuinely `Big Data` files.
 
-For this, DeployR provides support for a feature called `big data directories`. See [here](http://deployr.revolutionanalytics.com/documents/admin/bigdata/) for details.
+For this, DeployR provides support for a feature called the External (Big Data) Directories. See [here](http://deployr.revolutionanalytics.com/documents/admin/bigdata/) for details.
 
 
 ## R Analytics Example Dependencies

@@ -9,11 +9,13 @@ DeployR supports the following types of data inputs:
 
 1. [DeployR-encoded](http://deployr.revolutionanalytics.com/dev/encoding) application generated data, including data read from databases, data input by end-users, or data otherwise derived by your application logic. These data can be sent as inputs and automatically decoded into the workspace of an R session when executing R code or an R script.
 
-2. References to repository-managed binary data files (rData) that cause the corresponding file data to be loaded into the workspace of an R session when executing R code or an R script.
+2. Uploaded data from files on the local file system (disk). 
 
-3. References to repository-managed data files (csv, dat, xls, etc) that cause the corresponding file data to be loaded into the working directory of an R session when executing R code or an R script.
+3. References to repository-managed binary data files (rData) that cause the corresponding file data to be loaded into the workspace of an R session when executing R code or an R script.
 
-4. References to external data sources, including URLs, external Web service endpoints or database connection endpoints along with associated credentials and/or record identifiers. These data can be sent as inputs and automatically decoded into the workspace and then used to load data directly into an R session when executing R code or an R script.
+4. References to repository-managed data files (csv, dat, xls, etc) that cause the corresponding file data to be loaded into the working directory of an R session when executing R code or an R script.
+
+5. References to external data sources, including URLs, external Web service endpoints or database connection endpoints along with associated credentials and/or record identifiers. These data can be sent as inputs and automatically decoded into the workspace and then used to load data directly into an R session when executing R code or an R script.
 
 ### About: DeployR Outputs
 

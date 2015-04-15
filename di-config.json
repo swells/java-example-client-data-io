@@ -3,7 +3,7 @@
         "repository": [{
             "file": {
                 "filename": "dataIO.R",
-                "directory": "example-client-data-io",
+                "directory": "example-data-io",
                 "descr": "Uploaded from DeployR CLI."
             },
             "permissions": {
@@ -14,7 +14,7 @@
         }, {
             "file": {
                 "filename": "hipStar.dat",
-                "directory": "example-client-data-io",
+                "directory": "example-data-io",
                 "descr": "Uploaded from DeployR CLI."
             },
             "permissions": {
@@ -25,7 +25,7 @@
         }, {
             "file": {
                 "filename": "hipStar.rData",
-                "directory": "example-client-data-io",
+                "directory": "example-data-io",
                 "descr": "Uploaded from DeployR CLI."
             },
             "permissions": {

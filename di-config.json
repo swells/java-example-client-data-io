@@ -39,7 +39,7 @@
             "help": "https://github.com/themarchoffolly/java-example-client-data-io/tree/master/examples/tutorial/auth-discrete-exec",
             "menu": [{
                 "item": "EncodedDataInBinaryFileOut",
-                "args": "1theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.EncodedDataInBinaryFileOut"
             }, {
                 "item": "ExternalDataInDataFileOut",
                 "args": "2theruntimeargs"

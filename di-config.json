@@ -1,0 +1,32 @@
+{
+    "app-install": {
+        "targets": [{
+            "topic": "Topic Name One",
+            "help": "http://optional/path/to/topic/help",
+            "menu": [{
+                "item": "T1A",
+                "args": "theruntimeargs"
+            }, {
+                "item": "T1B",
+                "args": "theruntimeargs"
+            }, {
+                "item": "T1C",
+                "args": "theruntimeargs"
+            }]
+        }, {
+            "topic": "Topic Name Two",
+            "help": "http://optional/path/to/topic/help",
+            "menu": [{
+                "item": "T2A",
+                "args": "theruntimeargs"
+            }, {
+                "item": "T2B",
+                "args": "theruntimeargs"
+            }]
+        }]
+    },
+
+    "app-run": {
+        "requireAuthentication": false
+    }
+}

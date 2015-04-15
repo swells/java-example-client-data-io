@@ -65,19 +65,19 @@
             }, {
                 "item": "LocalDataInDataFileOut",
                 "args": "theruntimeargs"
-            } {
+            }, {
                 "item": "ExternalDataInDataFileOut",
                 "args": "theruntimeargs"
-            } {
+            }, {
                 "item": "RepoFileInEncodedDataOut",
                 "args": "theruntimeargs"
-            } {
+            }, {
                 "item": "RepoFileInGraphicsPlotOut",
                 "args": "theruntimeargs"
-            } {
+            }, {
                 "item": "RepoFileInRepoFileOut",
                 "args": "theruntimeargs"
-            } {
+            }, {
                 "item": "MultipleDataInMultipleDataOut",
                 "args": "theruntimeargs"
             }]
@@ -90,16 +90,16 @@
             }, {
                 "item": "ExternalDataInDataFileOut",
                 "args": ""
-            } {
+            }, {
                 "item": "RepoFileInEncodedDataOut",
                 "args": ""
-            } {
+            }, {
                 "item": "RepoFileInGraphicsPlotOut",
                 "args": ""
-            } {
+            }, {
                 "item": "RepoFileInRepoFileOut",
                 "args": ""
-            } {
+            }, {
                 "item": "MultipleDataInMultipleDataOut",
                 "args": ""
             }]

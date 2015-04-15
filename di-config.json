@@ -38,34 +38,70 @@
             "topic": "Discrete Execution Data I/O",
             "help": "https://github.com/themarchoffolly/java-example-client-data-io/tree/master/examples/tutorial/auth-discrete-exec",
             "menu": [{
-                "item": "T1A",
+                "item": "EncodedDataInBinaryFileOut",
                 "args": "1theruntimeargs"
             }, {
-                "item": "T1B",
+                "item": "ExternalDataInDataFileOut",
                 "args": "2theruntimeargs"
             }, {
-                "item": "T1C",
+                "item": "RepoFileInEncodedDataOut",
                 "args": "3theruntimeargs"
+            }, {
+                "item": "RepoFileInGraphicsPlotOut",
+                "args": "3theruntimeargs"
+            }, {
+                "item": "RepoFileInRepoFileOut",
+                "args": "3theruntimeargs"
+            }, {
+                "item": "RepoFileInEncodedDataOut",
+                "args": "MultipleDataInMultipleDataOut"
             }]
         }, {
             "topic": "Stateful Execution Data I/O",
             "help": "https://github.com/themarchoffolly/java-example-client-data-io/tree/master/examples/tutorial/auth-stateful-exec",
             "menu": [{
-                "item": "T2A",
+                "item": "EncodedDataInBinaryFileOut",
                 "args": "theruntimeargs"
             }, {
-                "item": "T2B",
+                "item": "LocalDataInDataFileOut",
+                "args": "theruntimeargs"
+            } {
+                "item": "ExternalDataInDataFileOut",
+                "args": "theruntimeargs"
+            } {
+                "item": "RepoFileInEncodedDataOut",
+                "args": "theruntimeargs"
+            } {
+                "item": "RepoFileInGraphicsPlotOut",
+                "args": "theruntimeargs"
+            } {
+                "item": "RepoFileInRepoFileOut",
+                "args": "theruntimeargs"
+            } {
+                "item": "MultipleDataInMultipleDataOut",
                 "args": "theruntimeargs"
             }]
         }, {
             "topic": "Stateful Preload & Execution Data I/O",
             "help": "https://github.com/themarchoffolly/java-example-client-data-io/tree/master/examples/tutorial/auth-stateful-preload",
             "menu": [{
-                "item": "T2A",
-                "args": "theruntimeargs"
+                "item": "EncodedDataInBinaryFileOut",
+                "args": ""
             }, {
-                "item": "T2B",
-                "args": "theruntimeargs"
+                "item": "ExternalDataInDataFileOut",
+                "args": ""
+            } {
+                "item": "RepoFileInEncodedDataOut",
+                "args": ""
+            } {
+                "item": "RepoFileInGraphicsPlotOut",
+                "args": ""
+            } {
+                "item": "RepoFileInRepoFileOut",
+                "args": ""
+            } {
+                "item": "MultipleDataInMultipleDataOut",
+                "args": ""
             }]
         }]
     },

@@ -42,19 +42,19 @@
                 "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.EncodedDataInBinaryFileOut"
             }, {
                 "item": "ExternalDataInDataFileOut",
-                "args": "2theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.ExternalDataInDataFileOut"
             }, {
                 "item": "RepoFileInEncodedDataOut",
-                "args": "3theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.RepoFileInEncodedDataOut"
             }, {
                 "item": "RepoFileInGraphicsPlotOut",
-                "args": "3theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.RepoFileInGraphicsPlotOut"
             }, {
                 "item": "RepoFileInRepoFileOut",
-                "args": "3theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.RepoFileInRepoFileOut"
             }, {
-                "item": "RepoFileInEncodedDataOut",
-                "args": "MultipleDataInMultipleDataOut"
+                "item": "MultipleDataInMultipleDataOut",
+                "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.MultipleDataInMultipleDataOut"
             }]
         }, {
             "topic": "Stateful Execution Data I/O",

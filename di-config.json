@@ -50,9 +50,6 @@
                 "item": "RepoFileInGraphicsPlotOut",
                 "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.RepoFileInGraphicsPlotOut"
             }, {
-                "item": "RepoFileInRepoFileOut",
-                "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.RepoFileInRepoFileOut"
-            }, {
                 "item": "MultipleDataInMultipleDataOut",
                 "args": "com.revo.deployr.client.example.data.io.anon.discrete.exec.MultipleDataInMultipleDataOut"
             }]

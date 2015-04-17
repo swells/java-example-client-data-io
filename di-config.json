@@ -58,25 +58,25 @@
             "help": "https://github.com/themarchoffolly/java-example-client-data-io/tree/master/examples/tutorial/auth-stateful-exec",
             "menu": [{
                 "item": "EncodedDataInBinaryFileOut",
-                "args": "theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.EncodedDataInBinaryFileOut"
             }, {
                 "item": "LocalDataInDataFileOut",
-                "args": "theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.LocalDataInDataFileOut"
             }, {
                 "item": "ExternalDataInDataFileOut",
-                "args": "theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.ExternalDataInDataFileOut"
             }, {
                 "item": "RepoFileInEncodedDataOut",
-                "args": "theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.RepoFileInEncodedDataOut"
             }, {
                 "item": "RepoFileInGraphicsPlotOut",
-                "args": "theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.RepoFileInGraphicsPlotOut"
             }, {
                 "item": "RepoFileInRepoFileOut",
-                "args": "theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.RepoFileInRepoFileOut"
             }, {
                 "item": "MultipleDataInMultipleDataOut",
-                "args": "theruntimeargs"
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.MultipleDataInMultipleDataOut"
             }]
         }, {
             "topic": "Stateful Preload & Execution Data I/O",

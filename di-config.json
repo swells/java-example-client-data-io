@@ -60,8 +60,8 @@
                 "item": "EncodedDataInBinaryFileOut",
                 "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.EncodedDataInBinaryFileOut"
             }, {
-                "item": "LocalDataInDataFileOut",
-                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.LocalDataInDataFileOut"
+                "item": "LocalDataInEncodedDataOut",
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.LocalDataInEncodedDataOut"
             }, {
                 "item": "ExternalDataInDataFileOut",
                 "args": "com.revo.deployr.client.example.data.io.auth.stateful.exec.ExternalDataInDataFileOut"

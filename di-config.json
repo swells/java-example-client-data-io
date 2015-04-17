@@ -83,7 +83,7 @@
             "help": "https://github.com/themarchoffolly/java-example-client-data-io/tree/master/examples/tutorial/auth-stateful-preload",
             "menu": [{
                 "item": "EncodedDataInBinaryFileOut",
-                "args": "com.revo.deployr.client.example.data.io.auth.stateful.preload.EncodedDataInBinaryFileOu"
+                "args": "com.revo.deployr.client.example.data.io.auth.stateful.preload.EncodedDataInBinaryFileOut"
             }, {
                 "item": "ExternalDataInDataFileOut",
                 "args": "com.revo.deployr.client.example.data.io.auth.stateful.preload.ExternalDataInDataFileOut"
